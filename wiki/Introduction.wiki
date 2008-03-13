@@ -2,10 +2,10 @@
 #labels Featured
 
 = Introduction =
-This wiki is designed to be a guide for developers who wish to learn more about, extend, or contribute to the epiClock project, as well as an in depth [How To] guide on all the features of epiClock. The guide will contain in-depth analysis of the code.
+This wiki is designed to be a guide for developers who wish to learn more about, extend, or contribute to the epiClock project, as well as a user guide describing the features of epiClock. 
 
 = Guides =
-There are two types of guides which will be developed in this wiki. The [Developer_Guide Developer Guide] and the [User_Guide User Guide].
+There are two types of guides in this wiki. The [Developer_Guide Developer Guide] and the [User_Guide User Guide].
 
 == Developer Guide ==
   * [dev_design Understanding epiClock] - Major overview of the epiClock's structure
