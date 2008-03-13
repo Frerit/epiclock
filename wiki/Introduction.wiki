@@ -5,15 +5,15 @@
 This wiki is designed to be a guide for developers who wish to learn more about, extend, or contribute to the epiClock project, as well as an in depth [How To] guide on all the features of epiClock. The guide will contain in-depth analysis of the code.
 
 = Guides =
-There are two types of guides which will be developed in this wiki. The [Developer Guide] and the [User Guide].
+There are two types of guides which will be developed in this wiki. The [Developer_Guide Developer Guide] and the [User_Guide User Guide].
 
 == Developer Guide ==
-  * [Understanding epiClock] - Major overview of the epiClock's structure
-  * [epiClock Controller] - Major overview of the Controller
-  * [epiClock Clock Object] - Major overview of the Clock
-  * [epiClock Wheel Object] - Major overview of the Wheel.
+  * [dev_design Understanding epiClock] - Major overview of the epiClock's structure
+  * [dev_controller epiClock Controller] - Major overview of the Controller
+  * [dev_clock epiClock Clock Object] - Major overview of the Clock
+  * [dev_wheel epiClock Wheel Object] - Major overview of the Wheel.
 
 == User Guide ==
-  * [Quick Start] - The basics you need to know to deploy an epiClock
-  * [Image Guide] - Everything you need to know about creating your own image clock
-  * [Feature List] - The features of an epiClock
+  * [user_quick Quick Start] - The basics you need to know to deploy an epiClock
+  * [user_image Image Guide] - Everything you need to know about creating your own image clock
+  * [user_advanced Advanced Guide] - The features of an epiClock
