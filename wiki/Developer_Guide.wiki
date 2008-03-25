@@ -1,0 +1,10 @@
+#summary The entrance point for the developer guide, listing it's chapters.
+#labels Featured
+
+= Introduction =
+The following is a guide aimed towards the user-end of the epiClock, explaining it's features, how to control it, etc. All information in this guide will be front-facing. If you're looking for help understanding the back end code to edit the library and not implement it, you want the [User_Guide User Guide].
+
+= Chapters =
+  * [user_quick Quick Start] - The basics you need to know to deploy an epiClock
+  * [user_advanced Advanced Guide] - The features of an epiClock
+  * [user_image Image Guide] - Everything you need to know about creating your own image clock
