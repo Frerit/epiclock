@@ -1,0 +1,3 @@
+#summary The quick-start guide for creating an epiClock. Covers each model of clock.
+
+= Introduction =
