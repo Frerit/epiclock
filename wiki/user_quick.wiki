@@ -6,7 +6,7 @@ This guide will give you the basics to fire up each of the following clock model
   * Current Local Time
   * Countdown Clock - Supply a target date, and we'll count down to it.
   * Countup Clock - Supply a target date, and we'll count up from it.
-  * Cycling Countdown - Supply a target date, and we'll count down to it. And once it happens, we'll count up.
+  * Rollover Countdown - Supply a target date, and we'll count down to it. And once it happens, we'll count up.
   * Looping Timers - Supply a timer lifespan, and the timer will continuously run down to that point.
   * One Shot Timers - Supply a timer lifespan, and the timer will run down to that point.
   * Time Zone Offsets - Display the local time in any time zone
@@ -76,7 +76,7 @@ epiClock.set('id');
 A clock to count down to a certain date from the current time.
 {{{
 epiClock.set('id', {
-	model: 'D',							// Sets the clock model to count*D*own
+	model: 'D',				// Sets the clock model to count*D*own
 	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count down to.
 });
 }}}
