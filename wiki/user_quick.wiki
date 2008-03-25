@@ -66,10 +66,12 @@ We will now go over creating each type of clock using the lazyId concept, as it'
 
 *Note*: All these clocks can be made into the epiClock flipClock by passing in, through the settings object, the following: `face: new flip()`
 
-==Current Local Time==
-A simple clock to display the current time.
+==Current Local Time (C)==
+A simple clock to display the current time. This is the default clock, so no model argument needs to be passed.
 {{{
-epiClock.set('id');
+epiClock.set('id', {
+	format: 'M',				// Sets the clock to *M*eridian time, or pass in I for m*I*litary time
+});
 }}}
 
 ==Countdown Clock (D)==
@@ -131,5 +133,34 @@ epiClock.set('id', {
 });
 }}}
 
-  * Time Zone Offsets - Display the local time in any time zone
-  * Arbitrary Offsets - Ability to offset the clock in any way to some arbitrary point.
+==Time Zone Offsets==
+To get any clock to work on a different timezone, it takes two steps. The first is to set the clock to use UTC time, the second is to pass in the hour offset of the timezone. Let's say we wanted to set up a clock to show the current time in Palo Alto, Calif. Palo Alto is in Pacific Time, which during daylight savings, is 7 hours behind GMT.
+{{{
+epiClock.set('id', {
+	utc: true,				// Set the clock to use UTC time
+	hours: -7,				// Set the offset to -7 hours
+});
+}}}
+
+==Arbitrary Offsets==
+One of the nicer features of the clock is the ability to offset the clock by a number of years/days that are simply for show. In the demo, for instance, we detail time since the signing of the declaration of independence. To achieve this, we use the *disd* and *disy* settings. These stand for "display-days", "display-years". These values will not enter calculation, but merely add days/years to the clock.
+
+If you wish to offset a countdown clock by 20 days, 10 hours, use the following:
+{{{
+epiClock.set('id', {
+	model: 'D',				// Sets the clock model to count*D*own
+	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count down to.
+	days: 20,				// Offset the clock's counter by 30 days
+	hours: 10,				// Offset the clock's counter by 10 days
+});
+}}}
+
+Passing in offsets this way will affect the timer directly. Using the *disd* and *disy* settings, we can do things like adding 20 years, 10 days to the display time of a countup clock:
+{{{
+epiClock.set('id', {
+	model: 'U',				// Sets the clock model to count*U*p
+	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count up from
+	disy: 20,				// Offset the display years by 20
+	disd: 10,				// Offset the display days by 10
+});
+}}}
