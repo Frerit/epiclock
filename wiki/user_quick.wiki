@@ -85,7 +85,7 @@ epiClock.set('id', {
 A clock to count up from a certain date
 {{{
 epiClock.set('id', {
-	model: 'U',							// Sets the clock model to count*U*p
+	model: 'U',				// Sets the clock model to count*U*p
 	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count up from
 });
 }}}
@@ -94,7 +94,7 @@ epiClock.set('id', {
 A clock to count down to the target date, and when it arrives, and then changes to a countUp clock displaying the time passed since the target
 {{{
 epiClock.set('id', {
-	model: 'DU',							// Sets the clock model to count*D*own/*U*p
+	model: 'DU',				// Sets the clock model to count*D*own/*U*p
 	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count down to
 });
 }}}
