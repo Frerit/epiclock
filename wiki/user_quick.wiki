@@ -1,0 +1,100 @@
+#summary The quick-start guide for creating an epiClock. Covers each model of clock.
+#labels Phase-Support
+
+= Introduction =
+This guide will give you the basics to fire up each of the following clock models.
+  * Current Local Time
+  * Countdown Clock - Supply a target date, and we'll count down to it.
+  * Countup Clock - Supply a target date, and we'll count up from it.
+  * Rollover Countdown - Supply a target date, and we'll count down to it. And once it happens, we'll count up.
+  * Looping Timers - Supply a timer lifespan, and the timer will continuously run down to that point.
+  * One Shot Timers - Supply a timer lifespan, and the timer will run down to that point.
+  * Time Zone Offsets - Display the local time in any time zone
+  * Arbitrary Offsets - Ability to offset the clock in any way to some arbitrary point.
+
+= Important Bits =
+There are a number of ways to skin a cat, and likewise, there's a number of ways to create an epiClock. This guide will go over the *set* method of the epiClock. Set is a neat little function, and can accept new clocks in two ways. First, is the lazyId, where *set* takes the following parameters. 
+
+{{{
+epiClock.set(id, [settings]);
+}}}
+
+The first parameter you pass is a string containing the html id of the element you want the clock to live in. The second, optional parameter is an object of settings to configure your clock from the default. Using lazyId, you can create a number of clocks, you must, however, ensure that, unless you're only providing one and only one id for a simple text clock, you must pass in the (id, [settings]) combo.
+
+{{{
+// This is correct, and will create a single, standard current time text clock
+epiClock.set('clock');
+
+// These are incorrect. While lazyloading clocks, you must provide 
+// a settings object (even a blank one) for the next clock, or it won't create.
+epiClock.set('clock', {face: new flip()}, 'clock2');
+epiClock.set('clock2', 'clock', {face: new flip()});
+
+// These are correct
+epiClock.set('clock', {face: new flip()}, 'clock2', {});
+epiClock.set('clock2', {}, 'clock' {face: new flip()});
+}}}
+
+The *set* method also accepts properId parameters, which are:
+
+{{{
+epiClock.set({settings}, {settings}, ...);
+}}}
+
+The first parameter you pass is an object of settings which defines an entire clock. The second, optional parameter you pass is an object of settings which define a second clock. Be sure that, when using properId, you put the proper id into the object, or the clock won't get created.
+
+{{{
+// This is incorrect. Only the epiClock with the "clock" id will be created.
+epiClock.set({id: 'clock'}, {face: new flip()});
+
+// This is correct. Both clocks have the proper id provided
+epiClock.set({id: 'clock'}, {id: 'clock2], face: new flip()});
+}}}
+
+One of the coolest features of the *set* method is it's ability to mix lazyId and properId arguments. Just be sure that if you create a clock in this mixed environment using lazyId, you enter it's settings as the next parameter.
+
+{{{
+// This is incorrect, and the lazyId clock will overwrite the properId clock
+epiClock.set({id: 'clock'}, 'clock2', {id: 'clock3', face: new flip()});
+
+// This is correct
+epiClock.set({id: 'clock'}, 'clock2', {}, {id: 'clock3', face: new flip()});
+}}}
+
+=Creating Clocks=
+We will now go over creating each type of clock using the lazyId concept, as it's the fastest, simplest, and most efficient way of creating clocks, and should be used as the standard for most users.
+
+*Note*: All these clocks can be made into the epiClock flipClock by passing in, through the settings object, the following: `face: new flip()`
+
+==Current Local Time==
+A simple clock to display the current time.
+{{{
+epiClock.set('id');
+}}}
+
+==Countdown Clock (D)==
+A clock to count down to a certain date from the current time.
+{{{
+epiClock.set('id', {
+	model: 'D',				// Sets the clock model to count*D*own
+	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count down to.
+});
+}}}
+
+==Countup Clock (U)==
+A clock to count up from a certain date
+{{{
+epiClock.set('id', {
+	model: 'U',				// Sets the clock model to count*U*p
+	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count up from
+});
+}}}
+
+==Rollover Countdown (DU)==
+A clock to count down to the target date, and when it arrives, and then changes to a countUp clock displaying the time passed since the target
+{{{
+epiClock.set('id', {
+	model: 'DU',				// Sets the clock model to count*D*own/*U*p
+	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count down to
+});
+}}}
