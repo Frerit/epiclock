@@ -98,3 +98,27 @@ epiClock.set('id', {
 	target: "mm/dd/yy hh:mm:ss A/PM",	// Sets the date to count down to
 });
 }}}
+
+==Looping Timers (T)==
+Create timers that expire after a certain amount of time, and then restart and begin counting down again. These clocks start fresh whenever the page loads. 
+
+Some things parameters you may want to use for the timers are the 'display' parameter, and the 'callback' parameter. 
+{{{
+epiClock.set('id', {
+	model: 'DU',				// Sets the clock model to count*D*own/*U*p
+	timer: {			// Pass in the settings for the timer.
+		mins: 1,		// This will be a 1 minute
+		secs: 30,	// And 30 second timer
+	},
+	display: false,	// If display is set to (false), this clock will not be rendered in it's element id
+					// nor is it required to have an element id. 
+	callback: onTimer,	// If a function is passed in through callback, when the timer expires, it will
+					// fire that function
+});
+}}}
+
+
+Looping Timers - Supply a timer lifespan, and the timer will continuously run down to that point.
+  * One Shot Timers - Supply a timer lifespan, and the timer will run down to that point.
+  * Time Zone Offsets - Display the local time in any time zone
+  * Arbitrary Offsets - Ability to offset the clock in any way to some arbitrary point.
