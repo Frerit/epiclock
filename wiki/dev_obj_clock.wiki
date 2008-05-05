@@ -23,7 +23,19 @@ The clock object contains functions and methods to process the internal logic of
 || time || Array || This contains the current military time, as calculated by the *tick* method. It is in the format of [hh,mm,ss]. Users may interface with this object to get the raw time for external calculations, however, this will be reset every second. ||
 || meridian || String || If the [dev_obj_clock_format Clock Format] is set to Meridian Time, this will contain either 'am' or 'pm' depending on the time of day. This string is automatically updated by the *tick* function during a normal cycle. ||
 
-|| *Methods* || *Type* || *Description* ||
+|| *Methods* || *Parameters* || *Returns* || *Description* ||
+|| calcDisplace || ({object Settings }) || Integer - Offset in Milliseconds || When provided with an object containing offsets, the method will calculate and return the proper offset. Handles the following settings: *years, days, hours, mins, secs* ||
+|| normalize || NONE || void || Calculates the time zone offset and adds the appropriate number of milliseconds to the *displace* property so the base time the clock displays is in UTC. ||
+|| setDisplace || ({object Settings }) || void || When provided with an object containing offsets, the method will pipe the settings through the *calcDisplace* method and set the current offset to the return value of *calcDisplace*. In addition, it will set the value of the *disd* property to any provided value. Handles the following settings: *disy, disd, years, days, hours, mins, secs* ||
+|| timerOffset || ({integer SecondsToDisplace }) || void || Offsets the *displace* property by the number of provided seconds. This is called by the [dev_obj_epiClock epiClock Object] when it's *cycle* method is called to resume operation after a pause. ||
+|| setTarget || ([string DateString] OR [{object Settings}]) || void || Takes in either a string of a date (ex. "04/18/1986 09:01 PM EST") or a setting object containing a target parameter that contains either a string of a date for a counter target (ex. {target: "04/18/1986 09:01 PM EST", ...}) or an object containing offsets for a timer target (ex. {timer: {hours: 3}, ...}). This will either set the *target* and/or *timer* and *displace* properties, depending on provided parameters. ||
+|| resetTimer || NONE || void || Appends the value of the *timer* property to the *displace* property. ||
+|| init || NONE || void || Should be called after the page has loaded, and will be automatically by the [dev_obj_epiClock epiClock Manager] in normal operation. Sets the *contain* property with the HTMLElement object of it's container, and copies over internal parameters to the [dev_obj_face Face Object]. ||
+|| wind || NONE || void || Calls the [dev_obj_face Face Object]'s *load* method. ||
+|| fire || NONE || void || If the *callback* parameter is mapped to an actual function, this method will fire that callback. ||
+|| tick || NONE || void || Calculates the current time, based on offsets and timers, and puts it's currently calculated time/days into the *time* and *days* properties. ||
+|| render || NONE || void || Entry point for the [dev_obj_epiClock epiClock Manager]. If directed to based on internal *pause/display* properties, this function will call the *tick* method, calculate the current time, transform it based on it's set [dev_obj_clock_format Format] and [dev_obj_clock_model Model] settings, and then feed the calculated settings into it's [dev_obj_face Face]'s *render* method. ||
+
 
 == Source Code ==
 {{{
@@ -136,7 +148,6 @@ function clock(setting) {
 	this.render = function (){
 		if (this.pause) return;
 		this.tick();
-		if (!this.display) return;
 		
 		if (this.days == -1){
 			switch (this.model){
@@ -181,7 +192,7 @@ function clock(setting) {
 			e: this.meridian
 		};
 		
-		this.face.render(output);
+		if (!this.display) this.face.render(output);
 	}
 	
 	if (setting.utc) this.normalize();
