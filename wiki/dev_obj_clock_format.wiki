@@ -1,0 +1,9 @@
+#summary Different clock formats.
+#labels Phase-Design
+
+= Introduction =
+Each epiClock can be one of the following types of formats. To set an epiClock to one of the provided formats, pass in {format: '*<Format Code>*'} as part of the settings argument when creating a [dev_obj_clock Clock Object].
+
+|| *Format* || *Format Code* || *Description* ||
+|| Meridian Time || M || A 12 hour day, either Ante or Post Meridian. 13:00 hours would be displayed as 1:00 PM ||
+|| Military Time || I || A 24 hour day. 1:00 PM would be displayed as 13:00 hours ||
