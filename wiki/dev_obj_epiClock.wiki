@@ -1,18 +1,20 @@
 #summary Information on the epiClock Manager Object
-#labels Phase-Design
+#labels Featured
 
 = epiClock Manager =
 On each page that contains epiClocks, one central object allows users to create/modify/delete/interface with any of the epiClocks on that page. This is the static `epiClock` object.
 
 == Methods and Properties ==
 
-|| *Method/Property* || *Type* || *Description* ||
+|| *Properties* || *Type* || *Description* ||
 || version || String || The current version of the epiClock manager ||
 || clocks || Array || An array of [dev_obj_clock clock objects]. Every clock created and managed by the epiClock manager is stored here. ||
 || clockid || Object || An object containing key=>value pairs. *key* - Element ID of the div which contains the clock. *value*  - Integer ID which map to the Array Key of the epiClock.*clocks* array. ||
 || tokill || Array || An array of integers which maps to the Array Keys of the epiClock.*clocks* array. When the manager runs through it's normal processing loop, all clocks in the tokill array will be deconstructed, and the tokill array will be purged. ||
 || pause || Boolean || If set to true, the manager will not process any of it's clocks. If set to false, the manager will act normally. This is a global pause for ALL clocks. ||
 || hold || Integer || The number of seconds which the clock has remained paused. The manager will set this value automatically while it is paused, so upon resuming, it can offset all timers to keep them in sync. ||
+
+|| *Methods* || *Type* || *Description* ||
 || cycle() || Function || Pause/unpause all clocks. If the system is not paused and cycle is called, the manager will pause the clocks and begin tracking the time the clocks were on hold. If the system is paused and cycle is called, the manager will offset all the timers in it's memory with the amount of time the manager was paused, to keep them in sync. ||
 || use(n1,n2,n3...) || Function || Assumes each parameter provided is a [dev_obj_clock clock objects]. It then adds these provided clocks to the *clocks* array, and maps them appropriately to the *clockid* object. ||
 || kill(id) || Function || Assumes a String parameter matching the Element ID of a clock to be purged from the manager. This clock's ID is then added to the *tokill* array to be deconstructed on the next run of the manager. ||
