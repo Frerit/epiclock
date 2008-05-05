@@ -1,0 +1,102 @@
+#summary Information on the epiClock Manager Object
+#labels Phase-Design
+
+= epiClock Manager =
+On each page that contains epiClocks, one central object allows users to create/modify/delete/interface with any of the epiClocks on that page. This is the static `epiClock` object.
+
+== Methods and Properties ==
+
+|| *Method/Property* || *Type* || *Description* ||
+|| version || String || The current version of the epiClock manager ||
+|| clocks || Array || An array of [dev_obj_clock clock objects]. Every clock created and managed by the epiClock manager is stored here. ||
+|| clockid || Object || An object containing key=>value pairs. *key* - Element ID of the div which contains the clock. *value*  - Integer ID which map to the Array Key of the epiClock.*clocks* array. ||
+|| tokill || Array || An array of integers which maps to the Array Keys of the epiClock.*clocks* array. When the manager runs through it's normal processing loop, all clocks in the tokill array will be deconstructed, and the tokill array will be purged. ||
+|| pause || Boolean || If set to true, the manager will not process any of it's clocks. If set to false, the manager will act normally. This is a global pause for ALL clocks. ||
+|| hold || Integer || The number of seconds which the clock has remained paused. The manager will set this value automatically while it is paused, so upon resuming, it can offset all timers to keep them in sync. ||
+|| cycle() || Function || Pause/unpause all clocks. If the system is not paused and cycle is called, the manager will pause the clocks and begin tracking the time the clocks were on hold. If the system is paused and cycle is called, the manager will offset all the timers in it's memory with the amount of time the manager was paused, to keep them in sync. ||
+|| use(n1,n2,n3...) || Function || Assumes each parameter provided is a [dev_obj_clock clock objects]. It then adds these provided clocks to the *clocks* array, and maps them appropriately to the *clockid* object. ||
+|| kill(id) || Function || Assumes a String parameter matching the Element ID of a clock to be purged from the manager. This clock's ID is then added to the *tokill* array to be deconstructed on the next run of the manager. ||
+|| killall() || Function || Loops through the *tokill* array and kills any matching clocks. ||
+|| tick() || Function || The main execution cycle of the manager. If paused, this increments the hold counter. If not paused, this calls the *render()* function on all [dev_obj_clock clock objects], then calls the *killall* method to purge dead clocks. ||
+|| wind() || Function || Loops through the *clocks* array, and calls the *wind()* method on all [dev_obj_clock clock objects] it finds. ||
+|| set(id, [{settings }, [{settings }]]) || Function || Accepts a number of parameters to generate clocks. The syntax for provided parameters must be one of two methods, or a combination of both methods. You may provide arguments in the format: (*[string id, [{object settings }, [string id, [{object settings }, ...]]]]*) where the settings are optional. Or, in the format: (*[{object settings }, [{object settings }, ... ]]*). Or in a combined format of: (*[string id, [{object settings }, [{object settings }]]]*). ||
+|| init() || Function || Should be called once the window loads [*window.onload = epiClock.init*]. Loops through all dev_obj_clock clock objects] in the *clocks* array, and calls their *init()* method. ||
+
+== epiClock Source ==
+{{{
+epiClock = {
+	version	: '1.1',
+	clocks 	: [],
+	clockid	: {},
+	tokill	: [],
+	pause	: false,
+	hold	: 0,
+	cycle	: function (){
+		if (epiClock.pause) {
+			epiClock.pause = false;
+			for (clk in epiClock.clocks)
+				epiClock.clocks[clk].timerOffset(epiClock.hold);
+			epiClock.hold = 0;
+		} else epiClock.pause = true;
+	},
+	use		: function (){
+		for (var i = 0; i < arguments.length; ++i){
+			var c = arguments[i];
+			this.clockid[c.id] = (this.clocks.push(c)-1);
+		}
+	},
+	kill	: function (id){
+		epiClock.tokill.push(epiClock.clockid[id]);
+	},
+	killall	: function (){
+		for (id in epiClock.tokill){
+			try {
+				epiClock.clocks.splice(epiClock.tokill[id],1);
+			} catch (e) {}
+		}
+		epiClock.tokill = [];
+	},
+	tick	: function (){
+		if (epiClock.pause){
+			epiClock.hold++;
+			return;
+		}
+		for (r in epiClock.clocks){
+			epiClock.clocks[r].render();
+		}
+		epiClock.killall();
+	},
+	wind	: function (){
+		for (clk in epiClock.clocks)
+			epiClock.clocks[clk].wind();
+		window.onload = epiClock.init;
+	},
+	set		: function (){
+		var storeid = null;
+		var out = [];
+		if (arguments.length == 1 && ck(arguments[0],'string')) arguments[0] = {id: arguments[0]};
+		for (var i = 0; i < arguments.length; ++i){
+			hands = arguments[i];
+			if (ck(hands,'string')){
+				storeid = hands;
+				continue;
+			} else if (storeid != null){
+				hands['id'] = storeid; 
+			}
+			
+			storeid = null;
+			
+			var clck = new clock(hands);
+			this.use(clck);
+			out.push(clck);
+		}
+		return out;
+	},
+	init 	: function (){
+		for (clk in epiClock.clocks)
+			epiClock.clocks[clk].init();
+		epiClock.tick();
+		setInterval(epiClock.tick,1000);
+	}
+}
+}}}
