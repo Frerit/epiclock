@@ -9,9 +9,9 @@ There are two types of guides in this wiki. The [User_Guide User Guide] and the 
 
 == Developer Guide ==
   * [dev_design Understanding epiClock] - Major overview of the epiClock's structure
-  * [dev_controller epiClock Controller] - Major overview of the Controller
-  * [dev_clock epiClock Clock Object] - Major overview of the Clock
-  * [dev_face epiClock Face Object] - Major overview of the Face.
+  * [dev_obj_epiClock epiClock Manager] - Overview of the epiClock Manager
+  * [dev_obj_clock epiClock Clock Object] - Major overview of the Clock Object
+  * [dev_obj_face epiClock Face Object] - Major overview of the Face Object
 
 == User Guide ==
   * [user_quick Quick Start] - The basics you need to know to deploy an epiClock
