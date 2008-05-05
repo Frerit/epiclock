@@ -1,0 +1,157 @@
+#summary Information on the epiClock Face Object
+#labels Phase-Design
+
+= epiClock Clock =
+The face object contains functions and methods to display to the user on a web page the current time, as calculated by the [dev_obj_clock Clock Object].
+
+== Methods and Properties ==
+
+|| *Properties* || *Type* || *Description* ||
+|| dir || String || The relative directory path to any images that will be used by this clock face. ||
+|| ext || String || The extension representing the MIME type of any images that will be used. (gif,png,jpg,...) ||
+|| pre || Array || Any array containing the prefixes of your images. Expects 3 values which map to the [dev_obj_face_images Image Types]. ||
+|| type || String || The [dev_obj_face_type Face Type] which this face object represents. ||
+|| sep || String || The character to use to separate hours, minutes, and seconds. (ex. If the sep character is ':', the format output will be hh:mm:ss. If the char is '-', the output will be hh-mm-ss) ||
+|| tore || Object || An internal object which contains the current value of a given image position. This property is set by the system, so this object should not be modified by users. ||
+|| id || String || The ElementID of the container. From the [dev_obj_clock Clock Object]'s *id* parameter, mapped over during an *init* call.  ||
+|| contain || HTMLElement || The HTMLElement of the container. From the [dev_obj_clock Clock Object]'s *contain* parameter, mapped over during an *init* call.  ||
+|| model || String || The [dev_obj_clock_model Clock Model]. From the [dev_obj_clock Clock Object]'s *model* parameter, mapped over during an *init* call.  ||
+|| format || String || The [dev_obj_clock_model Clock Format]. From the [dev_obj_clock Clock Object]'s *format* parameter, mapped over during an *init* call.  ||
+
+|| *Methods* || *Parameters* || *Returns* || *Description* ||
+|| load || NONE || void || During a *wind* call from the [dev_obj_clock Clock Object], the *load* method is called. This loops through the settings in the *pre* property, and preloads the images the face will use.
+|| src || (string:prefix, string:digit) || String - Relative Path to an Image || This method takes in an image prefix and a digit, and outputs the relative path to the image. ||
+|| createContain || (string:id, string:prefix) || HTMLElement - Div appended to Contain || Creates a DIV element, with an ID equal to the provided parameter *id*, and class types: epiClockElem, epiClock_<*prefix*>. This div is then appended as an inline element, with pre-determined margins and padding, to the HTMLElement from the *contain* parameter. ||
+|| createImg || (string:key, string:position, string:prefix) || HTMLElement - Img appended to Container || Creates an IMG element, with an ID equal to the provided *key* parameter. The IMG element is then appended to an element with and ID equivalent to the *position* parameter. If no such element exists, the method will call *createContain* and pass in *position* as *id* and *prefix* as *prefix*. ||
+|| render || ({object Output }) || void || When provided with an output array from the [dev_obj_clock Clock Object]'s *render* method, a properly formatted clock face will be generated/updated. The Output object expects to get an object containing the following key/value pairs: {y: 'String of the Years', d: 'String of the Days', h: 'String of the Hour', m: 'String of the Minute', s: 'String of the Second', e: 'String of the Meridian'} ||
+|| str || (string:str, string:prefix) || void || Writes the provided string representing some component of the clock into it's appropriate container (which is automatically generated if it doesn't exist). ||
+|| img || (string:str, string:prefix) || void || Generates an image representing some component of the clock from the provided *str* parameter, and updates or places it in it's appropriate container (which is automatically generated if it doesn't exist). Uses the *srcing* method to calculate image replacement. ||
+|| srcing || (string:bit, string:digit, string:position) || void || Calculates the current value of some component of the clock from the provided *bit/digit/position* parameters. The system then compares this value to the last known value rendered. If the value is new and has never been set, a [dev_obj_face_image Dynamic First Image] is rendered. If the value is new and has been set before, a [dev_obj_face_image Dynamic Transition Image] is rendered. If the value is the same, a [dev_obj_face_image Static Image] is rendered. || 
+
+== Source Code ==
+{{{
+function face(params){
+	params = params || {};
+	this.dir = params.dir;
+	this.ext = params.ext;
+	this.pre = params.pre;
+	this.type = params.type || 'str';
+	this.sep = params.sep || ':';
+	this.tore = {};
+	
+	this.id;
+	this.contain;
+	this.model;
+	this.format;
+	
+	this.load = function (){
+		var pic = new Image();
+		for (bit in this.pre){
+			pre = this.pre[bit];
+			for (var i = 0; i <= 9; ++i){
+				pic.src = this.src(pre,i);
+			}
+			pic.src = this.src(pre,'am');
+			pic.src = this.src(pre,'pm');
+			i = 0;
+		}
+	}
+	
+	this.src = function (pre, digit){
+		return this.dir + '/' + pre + digit + '.' + this.ext;
+	}
+	
+	this.createContain = function (id, prefix){
+		var l = 0; var r = 0;
+		
+		switch (prefix){
+			case 'h': l = 5; r = 1; break;
+			case 'm': case 's': case 'sep': break;
+			default: l = 5; r = 5; break;
+		}
+	
+		var doc = document.createElement('div');
+			doc.id = id;
+			doc.style.className = 'epiClockElem epiClock_'+prefix;
+			doc.style.display = 'inline';
+			doc.style.margin = '0 ' + r + 'px 0 ' + l + 'px';
+		
+		this.contain.appendChild(doc);
+		return doc;
+	}
+	
+	this.createImg = function (key, pos, prefix){
+		var out = document.getElementById(pos) || this.createContain(pos, prefix);
+		var our = document.createElement('img');
+			our.id = key;
+
+		out.appendChild(our);
+		return our;
+	}
+	
+	this.render = function (out){
+		for (k in out){
+			switch (k){
+				case 'd': case 'y': if (this.model == 'C' || out[k] == '00') continue; break;
+				case 'e': if (this.model != 'C' || this.format != 'M') out[k] = ''; break;
+			}
+
+			this.type == 'str' ? this.str(out[k],k) : this.img(out[k],k);
+		}
+	}
+	
+	this.str = function(str, prefix){
+		pre = prefix + this.id;
+		var out = document.getElementById(pre) || this.createContain(pre, prefix);
+		out.innerHTML = str;
+		switch (prefix){
+			case 'h': case 'm': out.innerHTML += this.sep; break;
+			case 'd': out.innerHTML += ' days'; break;
+			case 'y': out.innerHTML += ' years'; break;
+		}
+	}
+	
+	this.img = function(str, prefix){
+		pre = prefix + this.id;
+		
+		switch (prefix){
+			case 'e': this.srcing(prefix, str, '0'); break;
+			default: for (var i = 0; i < str.length; ++i) this.srcing(prefix, str.charAt(i), i.toString()); break;
+		}
+		
+		switch (prefix.charAt(0)){
+			case 'h': case 'm': 
+				var skey = 'sep' + this.id + prefix;
+				if (!document.getElementById(skey)){
+					var out = this.createContain(skey, 'sep');
+					var sep = document.createElement('img');
+						sep.src = this.src('', 'sep');
+					out.appendChild(sep);
+				} 
+				break;
+		}
+
+	}
+	
+	this.srcing = function (bit, dig, pos){
+		pos = pos || '';
+		key = bit + this.id + pos;
+		var out = document.getElementById(key) || this.createImg(key, bit + this.id, bit);
+		
+		if (dig == ''){
+			document.getElementById(bit + this.id).innerHTML = '';
+			this.tore[key] = undefined;
+		} else if (ck(this.tore[key],'undefined')){
+			this.tore[key] = dig;
+			out.src = this.src(this.pre[2], dig);
+		} else if (this.tore[key] == dig){
+			out.src = this.src(this.pre[0], dig);
+		} else {
+			this.tore[key] = dig;
+			out.src = this.src(this.pre[1], dig);
+		}
+		
+	}
+
+}
+}}}
