@@ -4,7 +4,9 @@
 = epiClock Clock =
 The clock object contains functions and methods to process the internal logic of an individual clock, and calculate the time it should display. 
 
-== Properties and Methods ==
+== Methods and Properties ==
+
+|| *Properties* || *Type* || *Description* ||
 || contain || Dom Element || The page node which contains the epiClock. Referenced by the *id* property. Property filled when the *init()* method is called. ||
 || id || String || Maps to the ID of the element which is to contain the epiClock. ||
 || model || String || Maps to the [dev_obj_clock_model Clock Model]. ||
@@ -21,6 +23,7 @@ The clock object contains functions and methods to process the internal logic of
 || time || Array || This contains the current military time, as calculated by the *tick* method. It is in the format of [hh,mm,ss]. Users may interface with this object to get the raw time for external calculations, however, this will be reset every second. ||
 || meridian || String || If the [dev_obj_clock_format Clock Format] is set to Meridian Time, this will contain either 'am' or 'pm' depending on the time of day. This string is automatically updated by the *tick* function during a normal cycle. ||
 
+|| *Methods* || *Type* || *Description* ||
 
 == Source Code ==
 {{{
