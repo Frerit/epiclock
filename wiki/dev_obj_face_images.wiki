@@ -32,24 +32,27 @@ Within this folder, there are a set of *STATIC* images:
   * s2.gif
   * ...
   * s9.gif
-  * sam.gif [AM]
-  * spm.gif [PM]
+  * sam.gif (AM)
+  * spm.gif (PM)
 
 A set of *DYNAMIC TRANSITION* images:
   * d0.gif
   * d1.gif
   * ...
   * d9.gif
-  * dam.gif [AM]
-  * dpm.gif [PM]
+  * dam.gif (AM)
+  * dpm.gif (PM)
 
-And a set of *DYNAMIC FIRST* images:
+A set of *DYNAMIC FIRST* images:
   * df0.gif
   * df1.gif
   * ...
   * df9.gif
-  * dfam.gif [AM]
-  * dfpm.gif [PM]
+  * dfam.gif (AM)
+  * dfpm.gif (PM)
+
+And a static SEPERATOR image:
+  * sep.gif
 
 === Image Logic ===
 We'll take a look at how the clock face renders images, based on what happens. Let's say we start rendering the time at:
