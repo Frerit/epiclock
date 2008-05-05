@@ -6,6 +6,6 @@ The following is a guide aimed towards the user-end of the epiClock, explaining 
 
 = Chapters =
   * [dev_design Understanding epiClock] - Major overview of the epiClock's structure
-  * [dev_controller epiClock Controller] - Major overview of the Controller
-  * [dev_clock epiClock Clock Object] - Major overview of the Clock
-  * [dev_face epiClock Face Object] - Major overview of the Face.
+  * [dev_obj_epiClock epiClock Manager] - Overview of the epiClock Manager
+  * [dev_obj_clock epiClock Clock Object] - Major overview of the Clock Object
+  * [dev_obj_face epiClock Face Object] - Major overview of the Face Object
