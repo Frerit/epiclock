@@ -19,7 +19,7 @@ The face object contains functions and methods to display to the user on a web p
 || format || String || The [dev_obj_clock_format Clock Format]. From the [dev_obj_clock Clock Object]'s *format* parameter, mapped over during an *init* call.  ||
 
 || *Methods* || *Parameters* || *Returns* || *Description* ||
-|| load || NONE || void || During a *wind* call from the [dev_obj_clock Clock Object], the *load* method is called. This loops through the settings in the *pre* property, and preloads the images the face will use.
+|| load || NONE || void || During a *wind* call from the [dev_obj_clock Clock Object], the *load* method is called. This loops through the settings in the *pre* property, and preloads the images the face will use. ||
 || src || (string:prefix, string:digit) || String - Relative Path to an Image || This method takes in an image prefix and a digit, and outputs the relative path to the image. ||
 || createContain || (string:id, string:prefix) || HTMLElement - Div appended to Contain || Creates a DIV element, with an ID equal to the provided parameter *id*, and class types: epiClockElem, epiClock_<*prefix*>. This div is then appended as an inline element, with pre-determined margins and padding, to the HTMLElement from the *contain* parameter. ||
 || createImg || (string:key, string:position, string:prefix) || HTMLElement - Img appended to Container || Creates an IMG element, with an ID equal to the provided *key* parameter. The IMG element is then appended to an element with and ID equivalent to the *position* parameter. If no such element exists, the method will call *createContain* and pass in *position* as *id* and *prefix* as *prefix*. ||
