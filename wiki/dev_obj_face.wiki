@@ -16,7 +16,7 @@ The face object contains functions and methods to display to the user on a web p
 || id || String || The ElementID of the container. From the [dev_obj_clock Clock Object]'s *id* parameter, mapped over during an *init* call.  ||
 || contain || HTMLElement || The HTMLElement of the container. From the [dev_obj_clock Clock Object]'s *contain* parameter, mapped over during an *init* call.  ||
 || model || String || The [dev_obj_clock_model Clock Model]. From the [dev_obj_clock Clock Object]'s *model* parameter, mapped over during an *init* call.  ||
-|| format || String || The [dev_obj_clock_model Clock Format]. From the [dev_obj_clock Clock Object]'s *format* parameter, mapped over during an *init* call.  ||
+|| format || String || The [dev_obj_clock_format Clock Format]. From the [dev_obj_clock Clock Object]'s *format* parameter, mapped over during an *init* call.  ||
 
 || *Methods* || *Parameters* || *Returns* || *Description* ||
 || load || NONE || void || During a *wind* call from the [dev_obj_clock Clock Object], the *load* method is called. This loops through the settings in the *pre* property, and preloads the images the face will use.
