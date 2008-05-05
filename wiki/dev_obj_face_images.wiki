@@ -1,0 +1,98 @@
+#summary Image Prefix Types for a Clock Face
+#labels Phase-Design
+
+= Introduction =
+A [dev_obj_face Clock Face] which renders its output in images expects 3 types of images with given prefixes.
+
+|| Position || Image Type || Description ||
+|| 1 || Static || A standard image, used in cases where the previous component value is equal to the new component value. ||
+|| 2 || Dynamic Transition || An animated image, used in cases where the previous component value is different than the new component value. ||
+|| 3 || Dynamic First Image || An animated image, used in cases where the previous component value was not set. ||
+
+== Image Prefix Array ==
+When creating a new clock face, one of the expected parameters in the settings object is the *pre* array. This array is expected to contain the prefixes of the images which correspond to the above image types, in the above position order.
+
+So, if you have prefixed your static images with the letter "s", your Dynamic Transition images with the letter "d", and the Dynamic First images with the letters "df", your *pre* array would look as follows:
+{{{
+{pre: ['s','d','df']}
+}}}
+
+== Image Conventions Assumed ==
+The [dev_obj_face Face Object] assumes the following of your images.
+  * All images for the clock face reside in the same directory.
+  * All images share the same MIME type ext (gif,jpg,png,...)
+  * All images are named: *prefix*_digit_.*ext*
+  * Images exist for every combination of *prefix*[0-9].*ext*, *prefix*[Meridian].*ext*, and sep.*ext*
+
+For example, the flip clock provided with epiClock has all of it's images located in the *flip/* directory (relative to the epiClock/ folder). 
+
+Within this folder, there are a set of *STATIC* images:
+  * s0.gif
+  * s1.gif
+  * s2.gif
+  * ...
+  * s9.gif
+  * sam.gif [AM]
+  * spm.gif [PM]
+
+A set of *DYNAMIC TRANSITION* images:
+  * d0.gif
+  * d1.gif
+  * ...
+  * d9.gif
+  * dam.gif [AM]
+  * dpm.gif [PM]
+
+And a set of *DYNAMIC FIRST* images:
+  * df0.gif
+  * df1.gif
+  * ...
+  * df9.gif
+  * dfam.gif [AM]
+  * dfpm.gif [PM]
+
+=== Image Logic ===
+We'll take a look at how the clock face renders images, based on what happens. Let's say we start rendering the time at:
+{{{
+11:58:58 AM
+}}}
+
+When we calculate our images, we find that we have no previous elements, so the images we render will all be DYNAMIC FIRST images. We then get a set of image tags, who look in the *flip/* directory for the following:
+
+|| 1 || 1 || : || 5 || 9 || : || 5 || 8 || AM ||
+|| df1.gif || df1.gif || sep.gif || df5.gif || df9.gif || sep.gif || df5.gif || df8.gif || dfam.gif ||
+
+Once these images are rendered, the system allows them to remain for 300 milliseconds, allowing us to display animation (in terms of the default flip clock, this will be the animation of the clock flipping over from one number to the next). After those 300 milliseconds, those DYNAMIC FIRST images are replaced with static image.
+
+|| 1 || 1 || : || 5 || 9 || : || 5 || 8 || AM ||
+|| s1.gif || s1.gif || sep.gif || s5.gif || s9.gif || sep.gif || s5.gif || s8.gif || sam.gif ||
+
+When the clock runs it's cycle again, we calculate the time to be 11:59:59 AM. We then update any of the component values which have changed:
+
+|| 1 || 1 || : || 5 || 9 || : || 5 || *9* || AM ||
+|| s1.gif || s1.gif || sep.gif || s5.gif || s9.gif || sep.gif || s5.gif || *df9.gif* || sam.gif ||
+
+We change the clock's seconds digit from 8 to 9, so we replace it with a *df9.gif*. After 300 milliseconds, this will again become a static image.
+
+|| 1 || 1 || : || 5 || 9 || : || 5 || 9 || AM ||
+|| s1.gif || s1.gif || sep.gif || s5.gif || s9.gif || sep.gif || s5.gif || s9.gif || sam.gif ||
+
+When the clock runs again, we calculate the time to be 12:00:00 PM. We then update any of our components which have changed.
+
+|| 1 || *2* || : || *0* || *0* || : || *0* || *0* || *PM* ||
+|| s1.gif || *d2.gif* || sep.gif || *d0.gif* || *d0.gif* || sep.gif || *d0.gif* || *d0.gif* || *dpm.gif* ||
+
+Again, after 300 milliseconds, we replace the images with their static relatives:
+
+|| 1 || 2 || : || 0 || 0 || : || 0 || 0 || PM ||
+|| s1.gif || s2.gif || sep.gif || s0.gif || s0.gif || sep.gif || s0.gif || s0.gif || spm.gif ||
+
+And when we process the clock again the next second, we calculate the time to be 12:00:01 PM. We update to:
+
+|| 1 || 2 || : || 0 || 0 || : || 0 || *1* || PM ||
+|| s1.gif || s2.gif || sep.gif || s0.gif || s0.gif || sep.gif || s0.gif || *d1.gif* || spm.gif ||
+
+Which then, after 300 milliseconds becomes:
+
+|| 1 || 2 || : || 0 || 0 || : || 0 || 1 || PM ||
+|| s1.gif || s2.gif || sep.gif || s0.gif || s0.gif || sep.gif || s0.gif || s1.gif || spm.gif ||
