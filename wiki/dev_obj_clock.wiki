@@ -1,0 +1,186 @@
+#summary Information on the epiClock Clock Object
+#labels Phase-Design
+
+= epiClock Clock =
+The clock object contains functions and methods to process the internal logic of an individual clock, and calculate the time it should display. 
+
+== Properties and Methods ==
+|| contain || Dom Element || The page node which contains the epiClock. Referenced by the *id* property. Property filled when the *init()* method is called. ||
+|| id || String || Maps to the ID of the element which is to contain the epiClock. ||
+|| model || String || Maps to the [dev_obj_clock_model Clock Model]. ||
+|| format || String || Maps to the [dev_obj_clock_format Clock Format]. ||
+|| face || Object || The clock's [dev_obj_face face object]. ||
+|| display || Boolean || A toggle for displaying the clock. If set to true, clock will display normally. If set to false, the clock will run it's normal internal calculations, but it's face will never be rendered. ||
+|| displace || Integer || The number of seconds to offset the clock by. This is used to arbitrarily push the clock's time to any given offset. This can be filled by the user, or through the *setDisplace* method. ||
+|| disd || Integer || The Display Offset in Days. To arbitrarily offset the number of days a counter displays. ||
+|| days || Integer || The number of days since/remaining on a counter. This property is set automatically by the clocks' *tick* method, and should not be set by the user, as it will be overwritten during normal operation. ||
+|| target || Integer || The target end/beginning date of a counter/timer. This should be in milliseconds since the epoch, and should represent a date. This can be user set, or set through the *setTarget* method. ||
+|| timer || Integer || The length of a timer in seconds. This can be user set, or automatically set by the *setTarget* method. ||
+|| pause || Boolean || An internal pause setting. If true, this clock will act paused, even if the global pause in the [dev_obj_epiClock epiClock Object] is not enabled. *NOTE: Unlike the global pause, a local clock pause will not maintain an offset counter to keep timers in sync. A local clock pause will just silence the clock from calculating the current time!* ||
+|| callback || Reference || If the clock is a Timer/Counter, this is the external callback to fire when the timer/counter runs out/down. This default to null. ||
+|| time || Array || This contains the current military time, as calculated by the *tick* method. It is in the format of [hh,mm,ss]. Users may interface with this object to get the raw time for external calculations, however, this will be reset every second. ||
+|| meridian || String || If the [dev_obj_clock_format Clock Format] is set to Meridian Time, this will contain either 'am' or 'pm' depending on the time of day. This string is automatically updated by the *tick* function during a normal cycle. ||
+
+
+== Source Code ==
+{{{
+function clock(setting) {
+	if (ck(setting,'string')){ setting = {id: setting}; }
+	this.contain = null;
+	this.id = setting.id;
+	this.model = setting.model || 'C';
+	this.format = setting.format || 'M';
+	this.face = setting.face || new face({type: 'str'});
+	this.display = setting.display || true;
+
+ 	this.displace = 0;
+	this.disd = 0;
+	this.days = 0;
+	this.target =  0;
+	this.timer = 0;
+	this.pause = false;
+	this.callback = setting.callback || null;
+	
+	this.time = [0,0,0];
+	this.meridian = 'am';
+	
+	this.calcDisplace = function (setting){
+		var years = setting.years || 0;
+		var days = setting.days || 0;
+		var hours = setting.hours || 0;
+		var mins = setting.mins || 0;
+		var secs = setting.secs || (this.model.charAt(0) == 'D' ? 1 : 0);
+		
+		return (years*31570560000+days*86400000+hours*3600000+mins*60000+secs*1000);
+	}
+	
+	this.normalize = function (){
+		this.displace += new Date().getTimezoneOffset()*60000;
+	}
+	
+	this.setDisplace = function (setting){
+		this.disd = setting.disd || this.disd;
+		if (setting.disy) this.disd += Math.floor(365.4 * setting.disy);
+		this.displace = (this.model.charAt(0) == 'D' ? -1 : 1) * this.calcDisplace(setting);
+	}
+	
+	this.timerOffset = function (offset){
+		switch(this.model){ case 'T': case 'O': break; default: return; }
+		this.displace -= offset * 1000;
+	}
+	
+	this.setTarget = function (setting){
+		if (ck(setting,'string')) setting = {target: setting};
+		if (setting.target){
+			this.target = new Date(setting.target).valueOf();
+		}
+		if (setting.timer){
+			this.target = new Date().valueOf();
+			this.timer = -1 * (this.calcDisplace(setting.timer) - 1);
+			this.displace = this.timer;
+		}
+	}
+	
+	this.resetTimer = function(){
+		this.displace += this.timer;
+	}
+	
+	this.setDisplace(setting);
+
+	this.setTarget(setting);
+	
+	this.init = function (){
+		this.contain = document.getElementById(this.id);
+		this.face.id = this.id;
+		this.face.contain = this.contain;
+		this.face.model = this.model;
+		this.face.format = this.format;
+	};
+	
+	this.wind = function (){
+		this.face.load();
+	}
+	
+	this.fire = function (){
+		if (ck(this.callback, 'function')) this.callback();
+		this.callback = null;
+	}
+	
+	this.tick = function (){
+		var now = new Date(new Date().valueOf() + this.displace);
+		var offset;
+		
+		switch (this.model){
+			case 'C':
+				this.time = [now.getHours(), now.getMinutes(), now.getSeconds()]; 
+				return;
+			case 'U':
+				offset = new Date(now.valueOf() - this.target);
+				break;
+			case 'D':
+			case 'DU':
+			case 'T':
+			case 'O':
+				offset = new Date(this.target - now.valueOf());
+				break;
+		}
+		
+		var sec = Math.floor(offset.valueOf()/1000);
+		this.days = this.disd+calc(sec,86400,100000);
+		this.time = [calc(sec,3600,24),calc(sec,60,60),calc(sec,1,60)];
+	}
+		
+	this.render = function (){
+		if (this.pause) return;
+		this.tick();
+		if (!this.display) return;
+		
+		if (this.days == -1){
+			switch (this.model){
+				case 'D':
+				case 'O':
+					this.fire();
+					epiClock.kill(this.id);
+					this.contain.innerHTML = 'This Timer Has Expired'; return;	
+					break;
+					
+				case 'DU':
+					this.fire();
+					this.model = 'U'; this.render(); return;
+					break;
+					
+				case 'T':
+					this.fire();
+					this.resetTimer();
+					this.render();
+					break;
+			}
+		}
+		
+		
+		if (this.model == 'C'){
+			this.meridian = 'am';
+		
+			if (this.time[0] >= 12){
+				if (this.format == 'M') 
+					this.time[0] -= (this.time[0] == 12 ? 0 : 12);
+				this.meridian = 'pm';
+			} else if (this.time[0] == 0)
+				this.time[0] += 12;
+		}
+
+		var output = {
+			y: tock(Math.floor(this.days/365.4)),
+			d: tock(this.days > 365 ? this.days%365 : this.days),
+			h: tock(this.time[0]), 
+			m: tock(this.time[1]), 
+			s: tock(this.time[2]),  
+			e: this.meridian
+		};
+		
+		this.face.render(output);
+	}
+	
+	if (setting.utc) this.normalize();
+}
+}}}
