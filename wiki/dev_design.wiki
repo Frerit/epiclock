@@ -1,8 +1,9 @@
 #summary High Level Overview of epiClock
+#labels Phase-Design
 
 = 3 Objects, Many Clocks =
 
 epiClock is composed of three separate, yet equally important objects. 
-  # face() - Manages the graphical front end of the epiClock
-  # clock() - Contains a face() object, and manages the logic backend of the epiClock.
-  # epiClock - Contains clock() objects, and manages all clocks on a page.
+  # face() - Manages the graphical front end of the epiClock ([dev_obj_face View Details])
+  # clock() - Contains a face() object, and manages the logic backend of the epiClock. ([dev_obj_clock View Details])
+  # epiClock - Contains clock() objects, and manages all clocks on a page. ([dev_obj_epiClock View Details])
