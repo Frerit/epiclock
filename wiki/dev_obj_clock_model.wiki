@@ -2,7 +2,7 @@
 #labels Phase-Design
 
 = Introduction =
-Each epiClock can be one of the following types of models. To set an epiClock to one of the provided models, pass in {model: '*<Model Code>*'} as part of the settings argument.
+Each epiClock can be one of the following types of models. To set an epiClock to one of the provided models, pass in {model: '*<Model Code>*'} as part of the settings argument when creating a [dev_obj_clock Clock Object].
 
 || *Model* || *Model Code* || *Description* ||
 || Clock || C || Displays a clock that displays the current time, with any user provided offsets. ||
