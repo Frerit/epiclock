@@ -1,0 +1,18 @@
+#summary Complete List of epiClock Features
+#labels Phase-Support
+
+= epiClock Settings =
+The following is a complete list of arguments you can pass into an epiClock, and the results of doing so.
+
+|| *Name* || *Default* || *Acceptable Values* || *Description* ||
+|| id || NONE || ID of HTML Element || This is a required element for ever clock, and refers to the ID of the HTML element which will wrap the clock. ||
+|| model || C || [user_clock_model View All Models] || The clock model. This determines the major functionality of the epiClock. It determines it's function as either a Counter, Clock, or Timer. ||
+|| format || M || [user_clock_format View All Formats] || The clock format. This determines how the output of a Clock should be displayed (12 vs. 24 Hour Day) ||
+|| face || [user_face Text Clock] || [user_face Face Guide] || The clock face. This determines how your clock will be displayed on a webpage. (As text, images, etc). ||
+|| display || true || true/false || If display is set to false, then the clock face will stop updating the clock. ||
+|| callback || NONE || Any Javascript Function || When a Timer or CountDown Counter runs out, you can have the clock fire your own custom function. Useful if you want to publish an alert to the user, redirect the page, move content, etc. ||
+|| years || 0 || Any Number ||  ||
+|| days || 0 || Any Number ||  ||
+|| hours || 0 || Any Number ||  ||
+|| mins || 0 || Any Number ||  ||
+|| secs || 0 || Any Number ||  ||
