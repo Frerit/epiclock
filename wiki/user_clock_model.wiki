@@ -1,0 +1,16 @@
+#summary About clock formats
+#labels Phase-Design
+
+= Introduction =
+Clock models determine what the epiClock will create. There are three types of models available: *clocks, timers,* and *counters*.
+
+|| *Model* || *Model Code* || Model Type || *Description* ||
+|| Clock || C || CLOCK || Displays a clock that displays the current time, with any user provided offsets. ||
+|| Countdown Counter || D || COUNTER || Sets the counter to count down to a provided target date, expiring when the date passes. ||
+|| Countup Counter || U || COUNTER || Sets the counter to count up from a provided target date. ||
+|| Rollover Counter || DU || COUNTER || Sets the counter to count down to a provided target date. When the date passes, the clock will become a *Countup Counter* instead of expiring. ||
+|| One-Shot Timer || O || TIMER || Sets the timer to count down a certain amount of time, starting at page load. (ex. A 5 second timer will expire 5 seconds after page load.) ||
+|| Looping Timer || T || TIMER || Sets the timer to count down a certain amount of time, starting at page load. When the timer runs out, instead of expiring, it will start again, counting down the same amount of time. ||
+
+= Use Cases =
+For simple examples of all the possible clock models offered, check out the [user_quick Quickstart Guide].
