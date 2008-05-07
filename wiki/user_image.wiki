@@ -24,3 +24,125 @@ The reason for the redundant images is to handle the animations. The animated cl
 || Dynamic Transition || The dynamic transition image is the core of the clock's animation, and will be displayed as a number transitions (when 10:59 becomes 11:00). This needs to be an animated gif that can display the transition in *300 milliseconds*, after which time the dynamic image will be replaced by it's equivalent static one. ||
 || Dyanmic First || The dynamic first image is all about looking good from the start of the animation to the finish. When the clock first loads, all images used will be the dynamic first images. In the flip clock, for instance, all of the dynamic transition images show the old number, and then flip to the next. (So when the number 9 starts off as an 8, and flips down to a 9). This looks pretty terrible when the clock first loads. The flip clock's dyanmic first image starts off with a 0 and flips to the number (So the number 9 starts off as 0 and flips down to a 9), which gives the clock a nice overall look at startup. ||
 
+= Creating Your Clock =
+Once you have determined which image clock you're going to go with (static or animated), it's up to you to put together the images you want to use. This guide assumes you know how to do that. What we're going to cover now, is how to integrate your custom images with epiClock.
+
+*Note*: For animated clocks, you are required to animate the gifs yourself! Be sure your animated gifs show their transition in 300 milliseconds or less!
+
+== Naming Conventions ==
+  * All of your images (except the separator) need to have a prefix. The recommended prefixes we use are:
+    * s - Static Images
+    * d - Dynamic Transition
+    * df - Dynamic First
+  * All your images need to be of the same type (all .gif,.png,.jpg, etc). *Note* We recommended .gif for animated clocks!
+  * All of your images need to be in the same directory inside of the epiClock directory (the one that contains the prod.js and dev.js javascript files.)
+
+=== Sample Static Clock ==
+  * epiClock/
+    * prod.js
+    * dev.js
+    * myimg/
+      * s0.png
+      * s1.png
+      * s2.png
+      * s3.png
+      * s4.png
+      * s5.png
+      * s6.png
+      * s7.png
+      * s8.png
+      * s9.png
+      * sam.png
+      * spm.png
+      * sep.png (NOTE! NO PREFIX HERE! This is the separation character!)
+
+Let's assume this is your directory structure. When you create your epiClock to use this clock, it would look like this:
+{{{
+epiClock.set({
+    id: 'curtime',
+    face: new face({dir: 'epiClock/myimg', ext: 'png', pre: ['s','s','s'], type: 'img'})   
+    });
+}}}
+
+Let's take a look at what each bit of our clock face is doing:
+{{{
+    face: new face({
+        dir: 'epiClock/myimg',      // The directory our images are located in.
+        ext: 'png',                 // The extension of our images.
+        pre: ['s','s','s'],         // The prefix argument (Note: In static clocks, all 3 prefixes will be static)
+        type: 'img'                 // Make sure you tell the clock it's doing images!
+    })
+}}}
+
+|| *Parameter* || *Description* ||
+|| dir || Tells epiClock where the directory we use is located. ||
+|| ext || Tells epiClock what type of images we're using. ||
+|| pre || Tells epiClock what we've used to prefix our image types. ||
+|| type || Tells epiClock that we're using images instead of strings. ||
+
+=== Sample Animated Clock ==
+  * epiClock/
+    * prod.js
+    * dev.js
+    * myanimated/
+      * s0.gif
+      * s1.gif
+      * s2.gif
+      * s3.gif
+      * s4.gif
+      * s5.gif
+      * s6.gif
+      * s7.gif
+      * s8.gif
+      * s9.gif
+      * sam.gif
+      * spm.gif
+      * d0.gif
+      * d1.gif
+      * d2.gif
+      * d3.gif
+      * d4.gif
+      * d5.gif
+      * d6.gif
+      * d7.gif
+      * d8.gif
+      * d9.gif
+      * dam.gif
+      * dpm.gif
+      * df0.gif
+      * df1.gif
+      * df2.gif
+      * df3.gif
+      * df4.gif
+      * df5.gif
+      * df6.gif
+      * df7.gif
+      * df8.gif
+      * df9.gif
+      * dfam.gif
+      * dfpm.gif
+      * sep.gif (NOTE! NO PREFIX HERE! This is the separation character!)
+
+Let's assume this is your directory structure. When you create your epiClock to use this clock, it would look like this:
+{{{
+epiClock.set({
+    id: 'curtime',
+    face: new face({dir: 'epiClock/myanimated', ext: 'gif', pre: ['s','d','df'], type: 'img'})   
+    });
+}}}
+
+Let's take a look at what each bit of our clock face is doing:
+{{{
+    face: new face({
+        dir: 'epiClock/myanimated',      // The directory our images are located in.
+        ext: 'gif',                      // The extension of our images.
+        pre: ['s','d','df'],             // The prefix argument (Note: 1st is *static*, 2nd is *dynamic transition*, 3rd is *dynamic first*)
+        type: 'img'                      // Make sure you tell the clock it's doing images!
+    })
+}}}
+
+|| *Parameter* || *Description* ||
+|| dir || Tells epiClock where the directory we use is located. ||
+|| ext || Tells epiClock what type of images we're using. ||
+|| pre || Tells epiClock what we've used to prefix our image types. ||
+|| type || Tells epiClock that we're using images instead of strings. ||
