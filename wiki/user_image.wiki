@@ -1,0 +1,26 @@
+#summary A simple guide for users wishing to create their own image clocks.
+#labels Phase-Design
+
+= Introduction =
+Creating your own images to plug into the epiClock is an easy way better integrate the clock with the theme of your site in a way that stands out more than just styled text. To get started, it's good to figure out what kind of image clock you want, *static* or *animated*.
+
+== Static Clocks ==
+A static image clock contains a total of 13 images:
+  * Numbers 0-9
+  * A separation character (Like ":")
+  * An AM/PM image
+These 13 images will be used by the system to create any plausible system.
+
+== Animated Clocks ==
+An animated image clock (like the default flip clock), contains a total of 37 images.
+  * 3 sets of the numbers 0-9
+  * A separation character
+  * 3 sets of the am/pm images
+
+The reason for the redundant images is to handle the animations. The animated clocks have three types of image classes:
+
+|| *Name* || *Description* ||
+|| Static || The static image is the heart of the clock, as it will be displayed most often. In the flip clock, these are standard gifs. ||
+|| Dynamic Transition || The dynamic transition image is the core of the clock's animation, and will be displayed as a number transitions (when 10:59 becomes 11:00). This needs to be an animated gif that can display the transition in *300 milliseconds*, after which time the dynamic image will be replaced by it's equivalent static one. ||
+|| Dyanmic First || The dynamic first image is all about looking good from the start of the animation to the finish. When the clock first loads, all images used will be the dynamic first images. In the flip clock, for instance, all of the dynamic transition images show the old number, and then flip to the next. (So when the number 9 starts off as an 8, and flips down to a 9). This looks pretty terrible when the clock first loads. The flip clock's dyanmic first image starts off with a 0 and flips to the number (So the number 9 starts off as 0 and flips down to a 9), which gives the clock a nice overall look at startup. ||
+
