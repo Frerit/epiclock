@@ -11,8 +11,12 @@ The following is a complete list of arguments you can pass into an epiClock, and
 || face || [user_face Text Clock] || [user_face Face Guide] || The clock face. This determines how your clock will be displayed on a webpage. (As text, images, etc). ||
 || display || true || true/false || If display is set to false, then the clock face will stop updating the clock. ||
 || callback || NONE || Any Javascript Function || When a Timer or CountDown Counter runs out, you can have the clock fire your own custom function. Useful if you want to publish an alert to the user, redirect the page, move content, etc. ||
-|| years || 0 || Any Number ||  ||
-|| days || 0 || Any Number ||  ||
-|| hours || 0 || Any Number ||  ||
-|| mins || 0 || Any Number ||  ||
-|| secs || 0 || Any Number ||  ||
+|| years || 0 || Any Number || For counters, this will offset the target date by the given number of years. ||
+|| days || 0 || Any Number || For counters, this will offset the target date by the given number of days.  ||
+|| hours || 0 || Any Number || For all clocks/counters/timers, this will offset the hours component. ||
+|| mins || 0 || Any Number || For all clocks/counters/timers, this will offset the minutes component. ||
+|| secs || 0 || Any Number || For all clocks/counters/timers, this will offset the seconds component. ||
+|| disy || 0 || Any Number || For all counters, this will offset the *display* years. Has no impact on calculation. ||
+|| disd || 0 || Any Number || For all counters, this will offset the *display* days. Has no impact on calculation. ||
+|| target || NONE || "DD/MM/YYYY HH:MM:SS" || This sets the target date for counters. The date should be provided as a string formatted like the one to the left. ||
+|| timer || NONE || [user_timer_obj Timer Object] || This sets the time a counter must tick away before firing. ||
