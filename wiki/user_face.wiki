@@ -8,7 +8,7 @@ Clock faces control how visitors to your web page see your clock. There are curr
 When creating a clock, the "Text Face" is the default used, and the time will be displayed in the following format:
 {{{
 hh:mm:ss
-}}
+}}}
 If you want to change something about a text face, such as the separation character (in this case, the colon "*:*"), simple pass in the following:
 {{{
 epiClock.set({
