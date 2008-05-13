@@ -129,6 +129,10 @@ function clock(setting) {
 			case 'C':
 				this.time = [now.getHours(), now.getMinutes(), now.getSeconds()]; 
 				return;
+			case 'S':
+				this.displace += 1000;
+				offset = this.displace;
+				break;
 			case 'U':
 				offset = new Date(now.valueOf() - this.target);
 				break;
@@ -192,7 +196,7 @@ function clock(setting) {
 			e: this.meridian
 		};
 		
-		if (!this.display) this.face.render(output);
+		if (this.display) this.face.render(output);
 	}
 	
 	if (setting.utc) this.normalize();
