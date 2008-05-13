@@ -11,6 +11,7 @@ Clock models determine what the epiClock will create. There are three types of m
 || Rollover Counter || DU || COUNTER || Sets the counter to count down to a provided target date. When the date passes, the clock will become a *Countup Counter* instead of expiring. ||
 || One-Shot Timer || O || TIMER || Sets the timer to count down a certain amount of time, starting at page load. (ex. A 5 second timer will expire 5 seconds after page load.) ||
 || Looping Timer || T || TIMER || Sets the timer to count down a certain amount of time, starting at page load. When the timer runs out, instead of expiring, it will start again, counting down the same amount of time. ||
+|| Stopwatch || S || COUNTER || Sets a stopwatch to count up seconds, starting at page load. This clock never computes it's value against the current time, and only uses the *displace* property of a clock to calculate the time. ||
 
 = Use Cases =
 For simple examples of all the possible clock models offered, check out the [user_quick Quickstart Guide].
