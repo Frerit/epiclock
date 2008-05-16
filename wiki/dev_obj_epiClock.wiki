@@ -22,12 +22,12 @@ On each page that contains epiClocks, one central object allows users to create/
 || tick || NONE || void || The main execution cycle of the manager. If paused, this increments the hold counter. If not paused, this calls the *render()* function on all [dev_obj_clock clock objects], then calls the *killall* method to purge dead clocks. ||
 || wind || NONE || void || Loops through the *clocks* array, and calls the *wind()* method on all [dev_obj_clock clock objects] it finds. ||
 || set || (string id, [{settings }, [{settings }]]) || Array - Each element, in order, of the created [dev_obj_clock Clock Object] || Accepts a number of parameters to generate clocks. The syntax for provided parameters must be one of two methods, or a combination of both methods. You may provide arguments in the format: (*[string:id, [{object settings }, [string:id, [{object settings }, ...]]]]*) where the settings are optional. Or, in the format: (*[{object settings }, [{object settings }, ... ]]*). Or in a combined format of: (*[string:id, [{object settings }, [{object settings }]]]*). ||
-|| init || NONE || void || Should be called once the window loads [*window.onload = epiClock.init*]. Loops through all dev_obj_clock clock objects] in the *clocks* array, and calls their *init()* method. You may now also define a global function named *fire_load()*, which the clock will initialize after pageload. ||
+|| init || NONE || void || Should be called once the window loads. Loops through all dev_obj_clock clock objects] in the *clocks* array, and calls their *init()* method. Makes use of the [dev_assistance "qup" Assistance Function]. ||
 
 == epiClock Source ==
 {{{
 epiClock = {
-	version	: '1.2',
+	version	: '1.3',
 	clocks 	: [],
 	clockid	: {},
 	tokill	: [],
@@ -42,9 +42,10 @@ epiClock = {
 		} else epiClock.pause = true;
 	},
 	use		: function (){
-		for (var i = 0; i < arguments.length; ++i){
-			var c = arguments[i];
-			this.clockid[c.id] = (this.clocks.push(c)-1);
+		var a = arguments;
+		for (var i = 0; i < a.length; ++i){
+			var c = a[i];
+			epiClock.clockid[c.id] = (epiClock.clocks.push(c)-1);
 		}
 	},
 	kill	: function (id){
@@ -71,25 +72,24 @@ epiClock = {
 	wind	: function (){
 		for (clk in epiClock.clocks)
 			epiClock.clocks[clk].wind();
-		window.onload = epiClock.init;
+		onl.add(epiClock.init);
 	},
 	set		: function (){
 		var storeid = null;
 		var out = [];
-		if (arguments.length == 1 && ck(arguments[0],'string')) arguments[0] = {id: arguments[0]};
-		for (var i = 0; i < arguments.length; ++i){
-			hands = arguments[i];
+		var a = arguments;
+		if (a.length == 1 && ck(a[0],'string')) a[0] = {id: a[0]};
+		for (var i = 0; i < a.length; ++i){
+			hands = a[i];
 			if (ck(hands,'string')){
 				storeid = hands;
 				continue;
-			} else if (storeid != null){
-				hands['id'] = storeid; 
-			}
+			} else if (storeid != null) hands['id'] = storeid;
 			
 			storeid = null;
 			
 			var clck = new clock(hands);
-			this.use(clck);
+			epiClock.use(clck);
 			out.push(clck);
 		}
 		return out;
@@ -99,7 +99,6 @@ epiClock = {
 			epiClock.clocks[clk].init();
 		epiClock.tick();
 		setInterval(epiClock.tick,1000);
-		if (typeof(fire_load) == 'funciton') fire_load();
 	}
 }
 }}}
