@@ -5,11 +5,11 @@
 The following are the assistance functions used by epiClock. All listed functions are globally accessible, and *may conflict with some Javascript Frameworks*! If you are using a framework (like jQuery, prototype, mootools, etc), you may experience some conflicts with the "$" function.
 
 || *Function Name* || *Parameters* || *Description* ||
-|| ck || `(mixed Check, [ string Against ])` || Checks the type of provided variable (Check) against the provided type (Against). If you supply no _Against_ parameter, the function will compare to "undefined". ||
+|| ck || `(mixed Check, [string Against ])` || Checks the type of provided variable (Check) against the provided type (Against). If you supply no _Against_ parameter, the function will compare to "undefined". ||
 || calc || `(int Seconds, int Per, int Cap)` || Computes time components from calculated offset seconds. This function is necessary to calculate the correct time after comparing two unix timestamps. ||
 || tock || `(int Integer)` || Cosmetic formatting for all time components. If the integer provided is less than 10, an extra 0 will be prepended to make it a 2 character digit. ||
 || flip || NONE || Shortcut function for creating a flip clock. Contains all the code for a [dev_obj_face Face Object] image flip clock. ||
-|| $ || `([string ElementID|object HTMLElement, [ ... ]])` || Fetches any number of HTMLElements from the document from the provided IDs/DomObject. ||
+|| $ || `([string ElementID|object HTMLElement, [... ]])` || Fetches any number of HTMLElements from the document from the provided IDs/DomObject. ||
 || `_` || `([string ElementType|object HTMLElement, [string innerHTML|object settings, [string innerHTML|object appendChild, [string innerHTML|object appendChild, [... ]]]]])` || Creates/styles/fills HTMLElements and returns them. ||
 || qup || `([string EventQueueType ])` || Sets up an event queue for certain window events (page load, dom load, etc). Any event you can set `(window.onload = function);` can be set through the queue, to allow multiple actions to be added. ||
 
@@ -181,4 +181,3 @@ function _(){
 
 var onl = new qup();
 }}}
-
