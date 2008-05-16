@@ -10,9 +10,9 @@ A [dev_obj_face Clock Face] which renders its output in images expects 3 types o
 || 3 || Dynamic First Image || An animated image, used in cases where the previous component value was not set. ||
 
 == Image Prefix Array ==
-When creating a new clock face, one of the expected parameters in the settings object is the *pre* array. This array is expected to contain the prefixes of the images which correspond to the above image types, in the above position order.
+When creating a new clock face, one of the expected parameters in the settings object is the `pre` propety. This array is expected to contain the prefixes of the images which correspond to the above image types, in the above position order.
 
-So, if you have prefixed your static images with the letter "s", your Dynamic Transition images with the letter "d", and the Dynamic First images with the letters "df", your *pre* array would look as follows:
+So, if you have prefixed your static images with the letter "s", your Dynamic Transition images with the letter "d", and the Dynamic First images with the letters "df", your `pre` property would look as follows:
 {{{
 {pre: ['s','d','df']}
 }}}
