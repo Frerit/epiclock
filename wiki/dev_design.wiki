@@ -8,25 +8,25 @@ epiClock is composed of three separate, yet equally important objects.
   # clock() - Contains a face() object, and manages the logic backend of the epiClock. ([dev_obj_clock View Details])
   # epiClock - Contains clock() objects, and manages all clocks on a page. ([dev_obj_epiClock View Details])
 
-These objects control how the clocks look, act, and calculate time.
+These objects control how the clocks look, act, and calculate time. The clock also contains some assistance functions, [dev_assistance Documented Here].
 
 = Lifecycle of a Clock = 
-The [dev_obj_epiClock epiClock Object]'s *set* method is called, and a setting object is provided, containing all the information needed to create a clock.
+The [dev_obj_epiClock epiClock Object]'s `set()` method is called, and a setting object is provided, containing all the information needed to create a clock.
 {{{
 epiClock.set({id: 'curtime', model: 'C', format: 'M', utc: true, hours: -4});
 }}}
 This will create a clock inside of an HTML element with the ID *curtime*. The clock will display the current time (as per it's [dev_obj_clock_model Clock Model Setting]) in meridian time (as per it's [dev_obj_clock_format Clock Format Setting]). The clock will display the time in UTC mode with an offset of *-4* hours, giving us the local time of the Eastern Daylight Timezone during Daylight Savings. (New York, Florida, Georgia, etc)
 
-Creating a clock using this method will automatically call the [dev_obj_epiClock epiClock Manager]'s *use* method, and add the clock into both the *clocks* Array and the *clockid* Object.
+Creating a clock using this method will automatically call the [dev_obj_epiClock epiClock Manager]'s `use()` method, and add the clock into both the `clocks` and the `clockid` properties.
 
 Next, we must set up the manager to wind our clocks and initialize once the window has loaded:
 {{{
 epiClock.wind();
 window.onload = epiClock.init;
 }}}
-The wind method loops through all of the [dev_obj_clock Clock Objects] in the *clocks* Array and call their *wind* methods, which will in turn call that [dev_obj_face Clock's Face Object]'s *load* method. This will preload any images needed by the Face to render the clock.
+The wind method loops through all of the [dev_obj_clock Clock Objects] in the `clocks` property and call their `wind()` methods, which will in turn call that [dev_obj_face Clock's Face Object]'s `load()` method. This will preload any images needed by the Face to render the clock.
 
-When the init() method is called, this will again loop through all of the [dev_obj_clock Clock Objects] and set the *contain* property to the HTMLElement with a corresponding ID. In addition, this will also copy over pertinent properties to the [dev_obj_face Clock's Face Object].
+When the `init()` method is called, this will again loop through all of the [dev_obj_clock Clock Objects] and set the `contain` property to the HTMLElement with a corresponding ID. In addition, this will also copy over pertinent properties to the [dev_obj_face Clock's Face Object].
 
 {{{
 epiClock.tick() =>
@@ -37,4 +37,4 @@ clock[id].tick();
 clock[id].face.render();
 }}}
 
-The init() method will also set up a timeout interval for the [dev_obj_epiClock Manager]'s *tick()* method, setting it to fire every 1 second. When this *tick* method fires, it will in turn activate all of it's [dev_obj_clock Clock Objects]' *render* method. This render method will, unless paused, call out to the Clock's *tick()* method to calculate the current time. And, as long as the clock is not set to not display updated, it will call out to the [dev_obj_face Clock Face]'s *render* method. This cycle will then be repeated ad infinitum. 
+The `init()` method will also set up a timeout interval for the [dev_obj_epiClock Manager]'s `tick()` method, setting it to fire every 1 second. When this `tick()` method fires, it will in turn activate all of it's [dev_obj_clock Clock Objects]' `render()` method. This render method will, unless paused, call out to the Clock's `tick()` method to calculate the current time. And, as long as the clock is not set to not display updated, it will call out to the [dev_obj_face Clock Face]'s `render()` method. This cycle will then be repeated ad infinitum. 
