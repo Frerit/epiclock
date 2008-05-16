@@ -10,16 +10,17 @@ This guide will give you the basics to fire up each of the following clock model
   * Looping Timers - Supply a timer lifespan, and the timer will continuously run down to that point.
   * One Shot Timers - Supply a timer lifespan, and the timer will run down to that point.
   * Time Zone Offsets - Display the local time in any time zone
+  * Stopwatch - Counts the time since page load that the counter was not paused.
   * Arbitrary Offsets - Ability to offset the clock in any way to some arbitrary point.
 
 = Important Bits =
-There are a number of ways to skin a cat, and likewise, there's a number of ways to create an epiClock. This guide will go over the *set* method of the epiClock. Set is a neat little function, and can accept new clocks in two ways. First, is the lazyId, where *set* takes the following parameters. 
+There are a number of ways to skin a cat, and likewise, there's a number of ways to create an epiClock. This guide will go over the `set()` method of the epiClock. Set is a neat little function, and can accept new clocks in two ways. First, is the lazyId, where `set()` takes the following parameters. 
 
 {{{
 epiClock.set(id, [settings]);
 }}}
 
-The first parameter you pass is a string containing the html id of the element you want the clock to live in. The second, optional parameter is an object of settings to configure your clock from the default. Using lazyId, you can create a number of clocks, you must, however, ensure that, unless you're only providing one and only one id for a simple text clock, you must pass in the (id, [settings]) combo.
+The first parameter you pass is a string containing the html id of the element you want the clock to live in. The second, optional parameter is an object of settings to configure your clock from the default. Using lazyId, you can create a number of clocks, you must, however, ensure that, unless you're only providing one and only one id for a simple text clock, you must pass in the `(id, [settings ])` combo.
 
 {{{
 // This is correct, and will create a single, standard current time text clock
@@ -35,7 +36,7 @@ epiClock.set('clock', {face: new flip()}, 'clock2', {});
 epiClock.set('clock2', {}, 'clock' {face: new flip()});
 }}}
 
-The *set* method also accepts properId parameters, which are:
+The `set()` method also accepts properId parameters, which are:
 
 {{{
 epiClock.set({settings}, {settings}, ...);
@@ -51,7 +52,7 @@ epiClock.set({id: 'clock'}, {face: new flip()});
 epiClock.set({id: 'clock'}, {id: 'clock2], face: new flip()});
 }}}
 
-One of the coolest features of the *set* method is it's ability to mix lazyId and properId arguments. Just be sure that if you create a clock in this mixed environment using lazyId, you enter it's settings as the next parameter.
+One of the coolest features of the `set()` method is it's ability to mix lazyId and properId arguments. Just be sure that if you create a clock in this mixed environment using lazyId, you enter it's settings as the next parameter.
 
 {{{
 // This is incorrect, and the lazyId clock will overwrite the properId clock
@@ -133,6 +134,18 @@ epiClock.set('id', {
 });
 }}}
 
+==Stopwatches (S)==
+Creating counters that will count the amount of time it has run without being paused (since page load). Takes any offsets into account when calculating the starting point.
+
+Some things parameters you may want to use for the counter are the `hours/mins/secs` offset parameters. 
+{{{
+epiClock.set('id', {
+	model: 'S',				// Sets the clock model to a *S*topwatch
+	mins: 20,				// Offset the stopwatch by 20 minutes
+	secs: 10,				// Offset the stopwatch by 10 seconds
+});
+}}}
+
 ==Time Zone Offsets==
 To get any clock to work on a different timezone, it takes two steps. The first is to set the clock to use UTC time, the second is to pass in the hour offset of the timezone. Let's say we wanted to set up a clock to show the current time in Palo Alto, Calif. Palo Alto is in Pacific Time, which during daylight savings, is 7 hours behind GMT.
 {{{
@@ -143,7 +156,7 @@ epiClock.set('id', {
 }}}
 
 ==Arbitrary Offsets==
-One of the nicer features of the clock is the ability to offset the clock by a number of years/days that are simply for show. In the demo, for instance, we detail time since the signing of the declaration of independence. To achieve this, we use the *disd* and *disy* settings. These stand for "display-days", "display-years". These values will not enter calculation, but merely add days/years to the clock.
+One of the nicer features of the clock is the ability to offset the clock by a number of years/days that are simply for show. In the demo, for instance, we detail time since the signing of the declaration of independence. To achieve this, we use the `disd` and `disy` parameters. These stand for "display-days", "display-years". These values will not enter calculation, but merely add days/years to the clock.
 
 If you wish to offset a countdown clock by 20 days, 10 hours, use the following:
 {{{
@@ -155,7 +168,7 @@ epiClock.set('id', {
 });
 }}}
 
-Passing in offsets this way will affect the timer directly. Using the *disd* and *disy* settings, we can do things like adding 20 years, 10 days to the display time of a countup clock:
+Passing in offsets this way will affect the timer directly. Using the `disd` and `disy` parameterss, we can do things like adding 20 years, 10 days to the display time of a countup clock:
 {{{
 epiClock.set('id', {
 	model: 'U',				// Sets the clock model to count*U*p
