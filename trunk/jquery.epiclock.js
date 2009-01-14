@@ -50,6 +50,9 @@ var EC_HALT = 'pause',
 			modifier: 0,
 			variance: 0,
 			daysadded: 0,
+			paused: 0,
+			tolerance: 0,
+			selfLoc: -1,
 			mode: EC_CLOCK			
 		},
 		formats: [
@@ -105,7 +108,7 @@ var EC_HALT = 'pause',
 	}
 	
 	function cycleClocks(){
-		$.each(clocks, function(){
+		$.each(clocks, function(i){
 			this.data('epiClock').render();
 		})
 	}
@@ -116,7 +119,29 @@ var EC_HALT = 'pause',
 	 * Creates the clock displays
 	 */
 	$.fn.epiclock = function(options){
-		options = $.extend(true, {}, defaults.epiClock, options);
+		switch (options){
+			case 'destroy':
+				return this.each(function(){
+					var jQ = $(this);
+					if (jQ.data('epiClock') instanceof epiClock)
+						jQ.data('epiClock').kill();
+				})
+			case 'disable':
+				return this.each(function(){
+					var jQ = $(this);
+					if (jQ.data('epiClock') instanceof epiClock)
+						jQ.data('epiClock').pause();
+				})
+			case 'enable':
+				return this.each(function(){
+					var jQ = $(this);
+					if (jQ.data('epiClock') instanceof epiClock)
+						jQ.data('epiClock').resume();
+				})
+			default:
+				options = $.extend(true, {}, defaults.epiClock, options);
+				break;
+		}
 		
 		this.each(function(){
 			var object = $(this),
@@ -159,7 +184,7 @@ var EC_HALT = 'pause',
 				}
 			});
 			
-			clocks.push(object);
+			clock.selfLoc = clocks.push(object) - 1;
 		})
 		
 		return this;
@@ -172,9 +197,27 @@ var EC_HALT = 'pause',
 	}
 	
 	epiClock.prototype = {
-		Q:	function() { return this.arbitrary.years; },
-		K:	function() { return this.arbitrary.days; },
+		Q:	function() { return this.arbitrary.years },
+		E:	function() { return this.arbitrary.days },
+		e:  function() { return this.arbitrary.days.pad(0) },
+		pause:	function(){
+			if (this.dead) return;
+			this.paused = new Date().valueOf();
+			this.dead = true;
+		},
+		resume:	function(){
+			if (!this.dead) return;
+			if (this.mode == EC_STOPWATCH)
+				this.displace += (this.paused - new Date().valueOf());
+			this.paused = 0;
+			this.dead = false;
+		},
 		kill:	function(){
+			// Remove and Renumber Clocks Array
+			clocks.splice(this.selfLoc,1);
+			$.each(clocks, function(i){this.data('epiClock').selfLoc = i});
+			
+			// Call on kill, set dead
 			if ($.isFunction(this.onKill)) this.onKill();
 			this.dead = true;
 		},
@@ -197,7 +240,6 @@ var EC_HALT = 'pause',
 					this.variance = 1;
 					break;
 				case EC_STOPWATCH:
-					this.normalize();
 					this.displace += -1 * new Date().valueOf();
 					return;
 				default:
@@ -260,7 +302,7 @@ var EC_HALT = 'pause',
 				case EC_EXPIRE:
 				case EC_LOOP:
 					now = this.target - now;
-					if (now < 1) return this.timerEnd();
+					if (now < this.tolerance) return this.timerEnd();
 					break;
 			}
 			
@@ -311,15 +353,19 @@ var EC_HALT = 'pause',
 
 	/** Prototype the Date function **/
 	$.extend(Date.prototype, {
-		V: function(){return this.modCalc(864e2,1e5)},	// Days
-		v: function(){return this.V().pad(0)},				// Paded Days
-		K: function(){return this.V()%365},
-		X: function(){return this.modCalc(36e2,24)},
-		x: function(){return this.X().pad(0)},
+		// Assistance Definitions
 		modCalc: function(mod1,mod2){return (Math.floor(Math.floor(this.valueOf()/1e3)/mod1)%mod2)},
 		months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 		days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 		suffix: [null, 'st', 'nd', 'rd'],
+		// Timer Functions
+		V: function(){return this.modCalc(864e2,1e5)},		// Days
+		v: function(){return this.V().pad(0)},				// Paded Days
+		K: function(){return this.V()%365},					// Days Offset for Years
+		k: function(){return this.K().pad(0)},				// Padded Offset Days
+		X: function(){return this.modCalc(36e2,24)},		// Hours
+		x: function(){return this.X().pad(0)},				// Padded Hours
+		// Day
 		d: function() { return this.getDate().pad('0') },
 		D: function() { return this.days[this.getDay()].substring(0,3) },
 		j: function() { return this.getDate() },
@@ -350,14 +396,15 @@ var EC_HALT = 'pause',
 		H: function() { return this.getHours().pad('0') },
 		i: function() { return this.getMinutes().pad(0) },
 		s: function() { return this.getSeconds().pad('0') },
+		u: function() { return this.getTime()%1000 },
 		// Timezone
 		O: function() { var t = this.getTimezoneOffset() / 60; return (t >= 0 ? '+' : '-') + Math.abs(t).pad(0).rpad(0,4) },
 		P: function() { var t = this.O(); return t.substr(0,3) + ':' + t.substr(3)},
-		Z: function() { return this.getTimezoneOffset() * 60; },
+		Z: function() { return this.getTimezoneOffset() * 60;},
 		// Full Date/Time
 		c: function() { return this.Y()+'-'+this.m()+'-'+this.d()+'T'+this.H()+':'+this.i()+':'+this.s()+this.P()},
-		r: function() { return this.toString(); },
-		U: function() { return this.getTime() / 1000; },
+		r: function() { return this.toString() },
+		U: function() { return this.getTime() / 1000 }
 	});
 	
 })(jQuery);
