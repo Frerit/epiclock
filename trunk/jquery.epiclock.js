@@ -8,8 +8,8 @@
  */
 
 	// Manager States
-var EC_HALT = 'pause',
-	EC_RUN = 'run',
+var EC_HALT = 'disable',
+	EC_RUN = 'enable',
 	EC_KILL = 'destroy',
 	// Clock Types
 	EC_CLOCK = 0,
@@ -18,7 +18,8 @@ var EC_HALT = 'pause',
 	EC_ROLLOVER = 3,
 	EC_EXPIRE = 4,
 	EC_LOOP = 5,
-	EC_STOPWATCH = 6;
+	EC_STOPWATCH = 6,
+	EC_HOLDUP = 7;
 	
 ;(function($){
 	var defaults = {
@@ -62,7 +63,8 @@ var EC_HALT = 'pause',
 			'V{d} x{h} i{m} s{s}',		// EC_ROLLOVER
 			'x{h} i{m} s{s}',			// EC_EXPIRE
 			'i{m} s{s}',				// EC_LOOP
-			'x{h} i{m} s{s}'			// EC_STOPWATCH
+			'x{h} i{m} s{s}',			// EC_STOPWATCH
+			'Q{y} K{d} x{h} i{m} s{s}'	// EC_HOLDUP
 		]
 	},
 		// The current mode the clock manager is in
@@ -200,6 +202,7 @@ var EC_HALT = 'pause',
 		Q:	function() { return this.arbitrary.years },
 		E:	function() { return this.arbitrary.days },
 		e:  function() { return this.arbitrary.days.pad(0) },
+		zero: new Date(0),
 		pause:	function(){
 			if (this.dead) return;
 			this.paused = new Date().valueOf();
@@ -222,7 +225,7 @@ var EC_HALT = 'pause',
 			this.dead = true;
 		},
 		init:	function(options, element){
-			if (options.mode < EC_CLOCK || options.mode > EC_STOPWATCH) 
+			if (options.mode < EC_CLOCK || options.mode > EC_HOLDUP) 
 				throw new Exception( 'Invalid Clock Mode.' );
 				
 			var clock = this;
@@ -242,6 +245,10 @@ var EC_HALT = 'pause',
 				case EC_STOPWATCH:
 					this.displace += -1 * new Date().valueOf();
 					return;
+				case EC_HOLDUP:
+					this.variance = -1;
+					this.modifier = 1;
+					break;
 				default:
 					this.modifier = 1;
 					this.variance = 0;
@@ -259,7 +266,7 @@ var EC_HALT = 'pause',
 					this.target = new Date(this.target).valueOf();
 					break;
 			}
-
+			
 			this.displace += this.modifier * this.calculateOffset();
 		},
 		calculateOffset:	function(offset){
@@ -278,10 +285,11 @@ var EC_HALT = 'pause',
 		},
 		render:		function(){
 			if (!this.tick()) return;
-			var clock = this;
-			
+			var clock = this,
+				time = (this.mode == EC_HOLDUP) ? this.zero : this.now;
+
 			$.each(this.frame, function(k,v){
-				var val = ($.isFunction(clock.now[k]) ? clock.now[k]() : clock[k]()) + '';
+				var val = ($.isFunction(time[k]) ? time[k]() : clock[k]()) + '';
 				if (v.data('last') != val) clock.onRender(v, val);
 				v.data('last', val)
 			})
@@ -291,6 +299,8 @@ var EC_HALT = 'pause',
 			var now = new Date().valueOf() + this.displace;
 			
 			switch (this.mode){
+				case EC_HOLDUP:
+					if (this.target < now) this.mode = EC_COUNTUP;
 				case EC_COUNTUP:
 					now -= this.target;
 					break;
