@@ -35,10 +35,6 @@ var EC_HALT = 'disable',
 				days: 0,
 				years: 0
 			},
-			display: {
-				years: true,
-				military: false
-			},
 			gmt: false,
 			target: null,
 			onTimer: null,
