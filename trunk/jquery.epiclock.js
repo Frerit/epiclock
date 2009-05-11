@@ -7,21 +7,13 @@
  *	GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
  */
 
-	// Manager States
-var EC_HALT = 'disable',
-	EC_RUN = 'enable',
-	EC_KILL = 'destroy',
-	// Clock Types
-	EC_CLOCK = 0,
-	EC_COUNTDOWN = 1,
-	EC_COUNTUP = 2,
-	EC_ROLLOVER = 3,
-	EC_EXPIRE = 4,
-	EC_LOOP = 5,
-	EC_STOPWATCH = 6,
-	EC_HOLDUP = 7;
+// Manager States
+var EC_HALT = 'disable', EC_RUN = 'enable', EC_KILL = 'destroy',
+// Clock Types
+EC_CLOCK = 0, EC_COUNTDOWN = 1, EC_COUNTUP = 2, EC_ROLLOVER = 3, 
+EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 	
-;(function($){
+(function($){
 	var defaults = {
 		epiClock: {
 			offset: {
@@ -39,6 +31,7 @@ var EC_HALT = 'disable',
 			target: null,
 			onTimer: null,
 			onKill: null,
+			onSetup: null,
 			onRender: function(v,val){v.html(val)},
 			format: null,
 			frame: {},
@@ -50,7 +43,8 @@ var EC_HALT = 'disable',
 			paused: 0,
 			tolerance: 0,
 			selfLoc: -1,
-			mode: EC_CLOCK			
+			mode: EC_CLOCK,
+			tpl: '<span></span>'
 		},
 		formats: [
 			'F j, Y, g:i:s a',			// EC_CLOCK
@@ -145,11 +139,10 @@ var EC_HALT = 'disable',
 			var object = $(this),
 				format = (options.format || defaults.formats[options.mode]).split(''),
 				isBuffering = false,
-				label = '<label class="epiClock"></label>',
-				span = '<span class="epiClock"></span>',
+				tpl = options.tpl || defaults.tpl, 
 				buffer = '',
 				clock = new epiClock(options, object);
-				
+			
 			object.data('epiClock', clock);
 
 			$.each(format, function(){
@@ -157,7 +150,7 @@ var EC_HALT = 'disable',
 				switch (x){
 					case ' ':
 						if (!isBuffering)
-							$(span).addClass('ecSpacer').appendTo(object);
+							$(tpl).addClass('epiclock epiclock-spacer').appendTo(object);
 						else buffer += x;
 						break;
 					case '{':
@@ -165,7 +158,7 @@ var EC_HALT = 'disable',
 						break;
 					case '}':
 						isBuffering = false;
-						$(label).html(buffer).appendTo(object);
+						$(tpl).addClass('epiclock').html(buffer).appendTo(object);
 						buffer = '';
 						break;
 					default:
@@ -173,16 +166,20 @@ var EC_HALT = 'disable',
 						if (isBuffering) buffer += x;
 							// If it's a special character, it will be span updated
 						else if (Date.prototype[x] || clock[x]) {
-							clock.frame[x] = $(span).attr('ref', x).appendTo(object);
+							clock.frame[x] = $(tpl)
+								.addClass('epiclock epiclock-digit')
+								.data('ec-encoding', x)
+								.appendTo(object);
 						}
 						// If it's anything else, it's a single char label seperator
 						else 
-							$(label).addClass('ecSeparator').html(x).appendTo(object);
+							$(tpl).addClass('epiclock epiclock-separator').html(x).appendTo(object);
 						break;
 				}
 			});
 			
 			clock.selfLoc = clocks.push(object) - 1;
+			if ($.isFunction(clock.onSetup)) clock.onSetup.call(this, []);
 		})
 		
 		return this;
