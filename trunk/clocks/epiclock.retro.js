@@ -1,5 +1,5 @@
-/**
- * epiClock Rendering Engines
+/*!
+ * Retro Style Flip Clock - epiClock Rendering Engine
  *
  * Copyright (c) 2008 Eric Garside (http://eric.garside.name)
  * Dual licensed under:
@@ -8,13 +8,15 @@
  */
 (function($){
 	
-	$.epiclocks = $.extend({}, {
+	$.extend($.epiclocks, {
 		retro: {
 			format: 'h:i:s a',
+			stylesheet: 'clocks/retro.css',
+			containerClass: 'epiclock-retro',
 			tpl: '<div></div>',
 			innerTpl: '<div class="epiclock-img"></div>',
 			onSetup: function(){
-				$('.epiclock-img').live('flip-clock', function(){
+				$('.epiclock-retro .epiclock-img').live('flip-clock', function(){
 					var el = $(this);
 					setTimeout(function(){ 
 						el.removeClass('a1').addClass('a2');
@@ -33,7 +35,7 @@
 				$.each(digits, function(i,v){
 					if (v == cmp[i]) return;
 					$(img[i] || $(clock.innerTpl).prependTo(el))
-						.removeClass('d'+cmp[i])
+						.removeClass('s d'+cmp[i])
 						.addClass('d' + v + ' a1')
 						.trigger('flip-clock');
 				});

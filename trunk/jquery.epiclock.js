@@ -1,5 +1,5 @@
-/**
- * epiClock 2.0 - Create Epic Clocks Easily
+/*!
+ * epiClock 2.1 - Create Epic Clocks Easily
  *
  * Copyright (c) 2008 Eric Garside (http://eric.garside.name)
  * Dual licensed under:
@@ -14,6 +14,12 @@ EC_CLOCK = 0, EC_COUNTDOWN = 1, EC_COUNTUP = 2, EC_ROLLOVER = 3,
 EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 	
 (function($){
+	
+	/**
+	 * Setup a placeholder for clock styles
+	 */
+	$.epiclocks = {};
+	
 	var defaults = {
 		epiClock: {
 			offset: {
@@ -31,7 +37,6 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 			target: null,
 			onTimer: null,
 			onKill: null,
-			onSetup: null,
 			onRender: function(v,val){v.html(val)},
 			format: null,
 			frame: {},
@@ -44,6 +49,9 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 			tolerance: 0,
 			selfLoc: -1,
 			mode: EC_CLOCK,
+			onSetup: null,
+			stylesheet: null,
+			containerClass: null,
 			tpl: '<span></span>'
 		},
 		formats: [
@@ -64,12 +72,28 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		// The clocks we're managing
 	clocks = [];
 	
+	/**
+	 * jQuery Entry Point - CSS Loader
+	 * 
+	 * Provides an interface to include stylesheets dynamically
+	 */
+	$.cssIncludes = {};
+	$.cssInclude = function(href, media){
+		if ($.cssIncludes[href]) return false;
+		
+		$.cssIncludes[href] = true;
+		media = media || 'screen';
+		
+		$('<link type="text/css" rel="stylesheet" href="' + href + '" media="' + media + '"/>')
+			.appendTo('head');
+	}
+	
 	/** 
 	 * jQuery Entry Point - Clock Manager
 	 * 
 	 * Provides an interface for the user to pause, destroy, or resume/start all clocks.
 	 */
-	$.epiclock = function(mode, precision){
+	$.epiclock = $.fn.clocks = function(mode, precision, path){
 		mode = mode || EC_RUN;
 		precision = precision || 5e2;
 		if (mode == current) return;
@@ -110,7 +134,13 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 	 * 
 	 * Creates the clock displays
 	 */
-	$.fn.epiclock = function(options){
+	$.fn.epiclock = function(options, predefined){
+		
+		if (typeof options == 'string' && $.epiclocks && $.epiclocks[options])
+			options = $.epiclocks[options];
+		else if (predefined && $.epiclocks && $.epiclocks[predefined])
+			options = $.extend(true, {}, $.epiclocks[predefined], options);
+		 
 		switch (options){
 			case 'destroy':
 				return this.each(function(){
@@ -179,7 +209,9 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 			});
 			
 			clock.selfLoc = clocks.push(object) - 1;
-			if ($.isFunction(clock.onSetup)) clock.onSetup.call(this, []);
+			if ($.isFunction(clock.onSetup)) clock.onSetup.call(clock, []);
+			if (clock.stylesheet) $.cssInclude(clock.stylesheet);
+			if (clock.containerClass) object.addClass(clock.containerClass);
 		})
 		
 		return this;
