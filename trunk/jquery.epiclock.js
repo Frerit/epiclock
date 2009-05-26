@@ -135,6 +135,7 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 	 * Creates the clock displays
 	 */
 	$.fn.epiclock = function(options, predefined){
+		var action = null;
 		
 		if (typeof options == 'string' && $.epiclocks && $.epiclocks[options])
 			options = $.epiclocks[options];
@@ -143,22 +144,14 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		 
 		switch (options){
 			case 'destroy':
-				return this.each(function(){
-					var jQ = $(this);
-					if (jQ.data('epiClock') instanceof epiClock)
-						jQ.data('epiClock').kill();
-				})
+				action = 'kill';
 			case 'disable':
-				return this.each(function(){
-					var jQ = $(this);
-					if (jQ.data('epiClock') instanceof epiClock)
-						jQ.data('epiClock').pause();
-				})
+				action = action||'pause';
 			case 'enable':
+				action = action||'resume';
 				return this.each(function(){
-					var jQ = $(this);
-					if (jQ.data('epiClock') instanceof epiClock)
-						jQ.data('epiClock').resume();
+					var ec = $(this).data('epiClock');
+					if (ec instanceof epiClock) ec[ action ]();
 				})
 			default:
 				options = $.extend(true, {}, defaults.epiClock, options);
@@ -251,7 +244,7 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		},
 		init:	function(options, element){
 			if (options.mode < EC_CLOCK || options.mode > EC_HOLDUP) 
-				throw new Exception( 'Invalid Clock Mode.' );
+				throw 'EPICLOCK_INVALID_MODE';
 				
 			var clock = this;
 			$.each(options, function(k, v){
@@ -268,7 +261,7 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 					this.variance = 1;
 					break;
 				case EC_STOPWATCH:
-					this.displace += -1 * new Date().valueOf();
+					this.displace += this.calculateOffset() + (-1 * new Date().valueOf());
 					return;
 				case EC_HOLDUP:
 					this.variance = -1;
