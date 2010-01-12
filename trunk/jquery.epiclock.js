@@ -1,5 +1,5 @@
 /*!
- * epiClock 2.1 - Create Epic Clocks Easily
+ * epiClock 2.2 - Create Epic Clocks Easily
  *
  * Copyright (c) 2008 Eric Garside (http://eric.garside.name)
  * Dual licensed under:
@@ -210,6 +210,49 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		return this;
 	}
 	
+	/*
+	 * Export the current time.
+	 */
+	$.fn.epiclockQuery = function(format){
+		var ec = $(this).data('epiClock');
+		
+		if (!ec)
+			return "";
+	
+		var format = format.split(''),
+			buffer = '',
+			isBuffering = false,
+			x = '';
+    
+		$.each(format, function(){
+			x = this+'';
+			switch (x){
+				case ' ':
+					buffer += x;
+					break;
+				case '{':
+					isBuffering = true;
+					break;
+				case '}':
+					isBuffering = false;
+					break;
+				default:
+					// If we're buffering, this is label text
+					if (isBuffering) buffer += x;
+					// If it's a special character, it will be span updated
+					else if (Date.prototype[x] || ec[x]) {
+						buffer += ($.isFunction(ec.now[x]) ? ec.now[x]() : ec[x]()) + ''
+					}
+					// If it's anything else, it's a single char label seperator
+					else 
+						buffer += x;
+					break;
+			}
+		});
+
+		return buffer;
+	}
+	
 	function epiClock(options, element){
 		if (this instanceof epiClock)
 			return this.init(options, element);
@@ -393,6 +436,8 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		k: function(){return this.K().pad(0)},				// Padded Offset Days
 		X: function(){return this.modCalc(36e2,24)},		// Hours
 		x: function(){return this.X().pad(0)},				// Padded Hours
+		p: function(){return this.modCalc(1,1)},			// Minutes
+		C: function(){return this.p().pad(0)},				// Padded Minutes
 		// Day
 		d: function() { return this.getDate().pad('0') },
 		D: function() { return this.days[this.getDay()].substring(0,3) },
