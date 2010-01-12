@@ -61,7 +61,7 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 			'V{d} x{h} i{m} s{s}',		// EC_ROLLOVER
 			'x{h} i{m} s{s}',			// EC_EXPIRE
 			'i{m} s{s}',				// EC_LOOP
-			'x{h} i{m} s{s}',			// EC_STOPWATCH
+			'x{h} C{m} s{s}',			// EC_STOPWATCH
 			'Q{y} K{d} x{h} i{m} s{s}'	// EC_HOLDUP
 		]
 	},
