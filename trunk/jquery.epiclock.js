@@ -436,7 +436,7 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		k: function(){return this.K().pad(0)},				// Padded Offset Days
 		X: function(){return this.modCalc(36e2,24)},		// Hours
 		x: function(){return this.X().pad(0)},				// Padded Hours
-		p: function(){return this.modCalc(1,1)},			// Minutes
+		p: function(){return this.modCalc(60,60)},			// Minutes
 		C: function(){return this.p().pad(0)},				// Padded Minutes
 		// Day
 		d: function() { return this.getDate().pad('0') },
