@@ -101,7 +101,7 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		switch (mode){
 			case EC_KILL:
 				$.each(clocks, function(){
-					this.removeData('epiClock');
+					this.epiclock('kill')
 				})
 				clocks = [];
 			case EC_HALT:
@@ -109,11 +109,16 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 					clearInterval(loop);
 					loop = null;
 				} 
+				
+				$.each(clocks, function(){
+					this.epiclock('disable')
+				})
+				
 				current = mode;
 				break;
 			case EC_RUN:
 				if (!loop){
-					cycleClocks();
+					cycleClocks(true);
 					loop = setInterval(cycleClocks, precision);
 				}
 				current = mode;
@@ -123,8 +128,12 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 		return this;
 	}
 	
-	function cycleClocks(){
+	function cycleClocks(enabled){
+		process = enabled === true;
 		$.each(clocks, function(i){
+			if (process)
+				this.epiclock('enable');
+				
 			this.data('epiClock').render();
 		})
 	}
@@ -305,6 +314,8 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 					break;
 				case EC_STOPWATCH:
 					this.displace += this.calculateOffset() + (-1 * new Date().valueOf());
+					this.dead = true;
+					this.paused = new Date().valueOf();
 					return;
 				case EC_HOLDUP:
 					this.variance = -1;
