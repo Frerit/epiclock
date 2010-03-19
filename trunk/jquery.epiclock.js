@@ -11,7 +11,8 @@
 var EC_HALT = 'disable', EC_RUN = 'enable', EC_KILL = 'destroy',
 // Clock Types
 EC_CLOCK = 0, EC_COUNTDOWN = 1, EC_COUNTUP = 2, EC_ROLLOVER = 3, 
-EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
+EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7,
+EC_EXPLICIT = 8;
 	
 (function($){
 	
@@ -62,7 +63,8 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 			'x{h} i{m} s{s}',			// EC_EXPIRE
 			'i{m} s{s}',				// EC_LOOP
 			'x{h} C{m} s{s}',			// EC_STOPWATCH
-			'Q{y} K{d} x{h} i{m} s{s}'	// EC_HOLDUP
+			'Q{y} K{d} x{h} i{m} s{s}',	// EC_HOLDUP
+			'F j, Y, g:i:s a'			// EC_EXPLICIT
 		]
 	},
 		// The current mode the clock manager is in
@@ -295,7 +297,7 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 			this.dead = true;
 		},
 		init:	function(options, element){
-			if (options.mode < EC_CLOCK || options.mode > EC_HOLDUP) 
+			if (options.mode < EC_CLOCK || options.mode > EC_EXPLICIT) 
 				throw 'EPICLOCK_INVALID_MODE';
 				
 			var clock = this;
@@ -320,6 +322,11 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 				case EC_HOLDUP:
 					this.variance = -1;
 					this.modifier = 1;
+					break;
+				case EC_EXPLICIT:
+					this.displace = - new Date().valueOf();
+					this.modifier = 1;
+					this.variance = 0;
 					break;
 				default:
 					this.modifier = 1;
@@ -375,6 +382,9 @@ EC_EXPIRE = 4, EC_LOOP = 5, EC_STOPWATCH = 6, EC_HOLDUP = 7;
 					if (this.target < now) this.mode = EC_COUNTUP;
 				case EC_COUNTUP:
 					now -= this.target;
+					break;
+				case EC_EXPLICIT:
+					now += this.target;
 					break;
 				case EC_ROLLOVER:
 					if (now > this.target) now = now - this.target;
