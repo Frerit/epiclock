@@ -235,9 +235,8 @@
         
         case mode.holdup:
         case mode.rollover:
-            clock.__displacement = 0;
             clock.mode = mode.countup;
-            clock.time = now.valueOf();
+            clock.restart(0);
             return zero;
             
         case mode.expire:
@@ -247,7 +246,7 @@
             return zero;
             
         case mode.loop:
-            clock.time = now.valueOf();
+            clock.restart();
             return zero;
 
         }
@@ -282,6 +281,7 @@
             return zero;
             
         case mode.countup:
+        case mode.stopwatch:
             current -= clock.time;
             break;
             
@@ -568,9 +568,8 @@
             break;
             
         case mode.stopwatch:
-            clock.__displacement = clock.__offset + (-1 * new Date().valueOf());
             clock.__tare = true;
-            return clock;
+            break;
             
         default:
             throw 'EPICLOCK_INVALID_MODE';
@@ -783,6 +782,17 @@
             $.each(instances, function ()
             {
                 this.clock.destroy();
+            });
+        },
+        
+        /**
+         *	Restart all clocks.
+         */
+        restart: function ()
+        {
+            $.each(instances, function ()
+            {
+                this.clock.restart();
             });
         }
     });
@@ -1011,6 +1021,21 @@
         {
             this.__destroy = true;
             triggerEvent(this.__uid, 'destroy');
+        },
+        
+        /**
+         *	Reset the clock to use the current time as the start time for the clock.
+         *
+         *  @param displacement The new value for the displacement.
+         */
+        restart: function (displacement)
+        {
+            if (displacement !== undefined)
+            {
+                this.__displacement = displacement;
+            }
+            
+            this.time = now.valueOf();
         },
         
         /**

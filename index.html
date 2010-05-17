@@ -105,6 +105,13 @@
                     
                     $.epiclock('#stopwatch').toggle();
                 });
+                
+                $('#resetStopwatch').click(function (event)
+                {
+                    event.preventDefault();
+                    
+                    $.epiclock('#stopwatch').restart();
+                });
                                
                 //------------------------------
                 //  Holdup
@@ -158,6 +165,11 @@
     		    {
                     $.epiclock.resume();
     		    });
+    		    
+    		    $('#restart').click(function ()
+    		    {
+                    $.epiclock.restart();
+    		    });
 		    });
 		</script>
 	</head>
@@ -192,7 +204,7 @@
             <dd id="loop"></dd>
             
             <dt>mode.stopwatch</dt>
-            <dd class="note">Keeps track of the time the clock has been running while not paused. <a href="#" id="toggleStopwatch">Toggle paused status</a>.</dd>
+            <dd class="note">Keeps track of the time the clock has been running while not paused. <a href="#" id="toggleStopwatch">Toggle paused status</a> or <a href="#" id="resetStopwatch">Restart</a>.</dd>
             <dd id="stopwatch"></dd>
             
             <dt>mode.holdup</dt>
@@ -219,6 +231,7 @@
             
             <button id="pause">Pause</button>
             <button id="resume">Resume</button>
+            <button id="restart">Restart</button>
         </fieldset>
 	</body>
 </html>
