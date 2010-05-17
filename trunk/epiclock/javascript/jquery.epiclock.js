@@ -1,7 +1,7 @@
 /*!
  *  epiClock 3.0
  *
- *  Copyright (c) 2008 Eric Garside (http://eric.garside.name)
+ *  Copyright (c) 2008 Eric Garside
  *  Dual licensed under:
  *      MIT: http://www.opensource.org/licenses/mit-license.php
  *      GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
