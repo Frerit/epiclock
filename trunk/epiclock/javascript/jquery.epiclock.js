@@ -757,11 +757,28 @@
         },
         
         /**
+         *	Bounce the manager.
+         *
+         *  @param precision    The precision to set in the manager upon restart.
+         */
+        bounce: function (precision)
+        {
+            if (precision !== undefined)
+            {
+                _.precision = precision;
+            }
+            
+            _.pause().resume();
+        },
+        
+        /**
          *	Pause all clocks.
          */
         pause: function ()
         {
             haltManager();
+            
+            return _;
         },
         
         /**
@@ -770,6 +787,8 @@
         resume: function ()
         {
             startManager();
+            
+            return _;
         },
         
         /**
@@ -783,6 +802,8 @@
             {
                 this.clock.destroy();
             });
+            
+            return _;
         },
         
         /**
@@ -794,6 +815,8 @@
             {
                 this.clock.restart();
             });
+            
+            return _;
         }
     });
     

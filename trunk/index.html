@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head>
-		<title></title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		
-		<style type="text/css">
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+        <style type="text/css">
             body
                 { font-family: Helvetica; }
-		
+        
             fieldset
                 { float: left; padding: 10px 15px; border: 1px solid #6F6F6F; }
                 
@@ -22,26 +22,26 @@
                 
             .note
                 { font-size: .85em; color: #6F6F6F; font-style: italic; }
-		</style>
-		<link media="screen" rel="stylesheet" type="text/css" href="epiclock/stylesheet/jquery.epiclock.css"/>
-		<link media="screen" rel="stylesheet" type="text/css" href="epiclock/renderers/retro/epiclock.retro.css"/>
-		<link media="screen" rel="stylesheet" type="text/css" href="epiclock/renderers/retro-countdown/epiclock.retro-countdown.css"/>
-		
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-		<script type="text/javascript" src="epiclock/javascript/jquery.dateformat.js"></script>
-		<script type="text/javascript" src="epiclock/javascript/jquery.epiclock.js"></script>
-		<script type="text/javascript" src="epiclock/renderers/retro/epiclock.retro.js"></script>
-		<script type="text/javascript" src="epiclock/renderers/retro-countdown/epiclock.retro-countdown.js"></script>
-		<script type="text/javascript">
-		    
-		    $(function ()
-		    {
+        </style>
+        <link media="screen" rel="stylesheet" type="text/css" href="epiclock/stylesheet/jquery.epiclock.css"/>
+        <link media="screen" rel="stylesheet" type="text/css" href="epiclock/renderers/retro/epiclock.retro.css"/>
+        <link media="screen" rel="stylesheet" type="text/css" href="epiclock/renderers/retro-countdown/epiclock.retro-countdown.css"/>
+        
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="epiclock/javascript/jquery.dateformat.js"></script>
+        <script type="text/javascript" src="epiclock/javascript/jquery.epiclock.js"></script>
+        <script type="text/javascript" src="epiclock/renderers/retro/epiclock.retro.js"></script>
+        <script type="text/javascript" src="epiclock/renderers/retro-countdown/epiclock.retro-countdown.js"></script>
+        <script type="text/javascript">
+            
+            $(function ()
+            {
                 //------------------------------
                 //
                 //  Define the Clocks
                 //
                 //------------------------------
-		      
+              
                 //------------------------------
                 //  Clock
                 //------------------------------
@@ -157,23 +157,23 @@
                 //------------------------------
                 
                 $('#pause').click(function ()
-    		    {
+                {
                     $.epiclock.pause();
-    		    });
-    		    
-    		    $('#resume').click(function ()
-    		    {
+                });
+                
+                $('#resume').click(function ()
+                {
                     $.epiclock.resume();
-    		    });
-    		    
-    		    $('#restart').click(function ()
-    		    {
+                });
+                
+                $('#restart').click(function ()
+                {
                     $.epiclock.restart();
-    		    });
-		    });
-		</script>
-	</head>
-	<body>
+                });
+            });
+        </script>
+    </head>
+    <body>
         <dl>
             <dt>mode.clock</dt>
             <dd class="note">Current time, based on the client's clock.</dd>
@@ -233,5 +233,5 @@
             <button id="resume">Resume</button>
             <button id="restart">Restart</button>
         </fieldset>
-	</body>
+    </body>
 </html>
