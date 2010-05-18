@@ -276,7 +276,7 @@
          *
          *  @return The number of minutes since the epoch, uncapped. (1min 30seconds would be 90s)
          */
-        e: function ()
+        E: function ()
         {
             return (_.X.apply(this) * 60) + _.p.apply(this);
         },
@@ -286,7 +286,7 @@
          *
          *  @return The number of minutes since the epoch, uncapped and padded to two digits. (1min 30seconds would be 90s)
          */
-        E: function ()
+        e: function ()
         {
             return pad(_.e.apply(this), 0);
         },
