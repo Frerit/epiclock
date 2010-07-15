@@ -24,7 +24,7 @@ This is a quick-start guide designed to get your using epiclock with as little e
                     //  The startup code
 		    jQuery(function ()
 		    {
-                        $('#clock').epiclock();
+                        jQuery('#clock').epiclock();
 		    });
 
 		</script>
