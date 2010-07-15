@@ -1,0 +1,31 @@
+#summary A guide to the configuration options for epiclock.
+#labels Phase-Support
+
+= Introduction =
+
+The epiclock plugin supports a number of different modes and configurations. These are passed into epiclock in the following format:
+
+{{{
+    jQuery('#some-element').epiclock({ /* Options */ });
+}}}
+
+= Available Options =
+
+|| *Option* || *Type* || *Description* ||
+|| mode || string || The clock mode describes what type of clock should be rendered. ||
+|| offset || object || An object containing offset values for displacing the computed time of the clock. ||
+|| startpaused || boolean || Flag which, if true, will start the clock off as paused. Default is false. ||
+|| utc || boolean || Flag to determine if the clock should be set to UTC mode. Default is false. ||
+|| gmt || boolean || Alias of utc ||
+|| render || function || Callback function for rendering the clock ticks. ||
+|| tare || boolean || Flag to determine if the clock should tare (reset) on pause. Default is false ||
+|| format || string || A formatting string, as described in the [RenderingGuide Rendering Guide] ||
+|| time || datestring || A string to pass to the JS Date object. Used in some modes. ||
+|| target || datestring || Alias of time ||
+|| displayOffset || object || An object containing offset values for displacing the years/days of a clock ||
+
+= Clock Modes =
+
+The following clock modes are available:
+
+|| *Mode* || *Description* || *Example* ||
