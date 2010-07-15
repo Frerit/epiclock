@@ -22,7 +22,7 @@
     //------------------------------
     
         /**
-         *	Because epiclock returns values as 2 digits in one number, we need an "inner template" to contain
+         *  Because epiclock returns values as 2 digits in one number, we need an "inner template" to contain
          *  the actual image objects.
          */
     var innerTemplate = '<span class="epiclock-img"><span class="epiclock-animation"></span></span>';
@@ -34,7 +34,7 @@
     //------------------------------
     
     /**
-     *	Animate a given element. The animation for the retro clock has four stages:
+     *  Animate a given element. The animation for the retro clock has four stages:
      *      :a1 - First stage of the animation
      *      :a2 - Second stage of the animation
      *      :a3 - Third stage of the animation
@@ -66,30 +66,30 @@
     $.epiclock.addRenderer('retro', function (element, value)
     {
             /**
-             *	Determine if this is a collection of digits, or the am/pm string, and parser
+             *  Determine if this is a collection of digits, or the am/pm string, and parser
              *  the value accordingly.
              */
         var digits = value.substring(1) === 'm' ? [value] : value.split('').reverse(),
             
             /**
-             *	The last value of this element.
+             *  The last value of this element.
              */
             last = element.data('epiclock-last'),
             
             /**
-             *	Comparison values for the last array as compared to this one.
+             *  Comparison values for the last array as compared to this one.
              */
             compare = last ? last.split('').reverse() : [],
             
             /**
-             *	The image instances for this block. If these don't yet exist, they will be created in the digit for...each callback.
+             *  The image instances for this block. If these don't yet exist, they will be created in the digit for...each callback.
              */
             image = $.makeArray($('.epiclock-img', element)).reverse();
             
         $.each(digits, function (index, digit)
         {
             /**
-             *	We don't want to change the image part if it hasn't been updated.
+             *  We don't want to change the image part if it hasn't been updated.
              */
             if (digit === compare[index])
             {
@@ -97,7 +97,7 @@
             }
             
             /**
-             *	Animate the number after the clock has changed.
+             *  Animate the number after the clock has changed.
              */
             $('.epiclock-animation', $(image[index] || $(innerTemplate).prependTo(element)).removeClass('d' + compare[index]).addClass('d' + digit)).removeClass('s').addClass('a1');
         });
@@ -107,5 +107,5 @@
     {
         this.bind('rendered', animate);
     });
-	
+    
 }(jQuery));
