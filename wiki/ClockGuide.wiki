@@ -26,6 +26,37 @@ The epiclock plugin supports a number of different modes and configurations. The
 
 = Clock Modes =
 
+You can specify a clock by using the syntax `jQuery.epiclock.modes.<identifier_of_mode>`. This is the preferred method of specifying clock types, as it is resistent to future changes and remappings/aliasing of modes.
+
 The following clock modes are available:
 
-|| *Mode* || *Description* || *Example* ||
+|| *Mode Identifier* || *Description* || *Example* ||
+|| clock || *Default clock type*. Renders a clock which displays the current time, based on the client's clock. || `.epiclock({mode: jQuery.epiclock.modes.clock})` ||
+|| explicit || Renders a clock which displays the current time, based on the datetime value passed to the clock. Allows for some server to explicitly set the starting value of the clock (to show the proper time, regardless of the value of the client's clock). || `.epiclock({mode: jQuery.epiclock.modes.explicit, time: 'March 1 2010, 11:20:30 GMT', utc: true})` ||
+|| countdown || Countdown clock, displaying the time remaining until a certain datetime. Expires when the countdown finishes. || `.epiclock({mode: jQuery.epiclock.modes.countdown, offset: {days: 1}})` ||
+|| countup || Countup clock, displaying the time since a certain datetime. If the datetime has not yet arrived, the clock will display negative numbers. || `.epiclock({mode: $.epiclock.modes.countup, offset: {days: 1}})` ||
+|| rollover || Exactly like the "countdown" clock, except on expiry, the clock will become a "countup" clock. || `.epiclock({mode: $.epiclock.modes.rollover, offset: {seconds: 10}})` ||
+|| expire || A clock which displays the number of remaining seconds until the expiry. || `.epiclock({mode: $.epiclock.modes.expire, offset: {seconds: 10}})` ||
+|| loop || Similar to the "expire" clock, only it will refresh the duration when the expiry hits. Also, this clock tares on pause. || `.epiclock({mode: $.epiclock.modes.loop, offset: {seconds: 5}})` ||
+|| stopwatch || A counter which displays the number of seconds since the clock was started. Tares any time when paused. (if the clock is at 10 and is paused for 3 seconds, when resumed, it will be at 10 seconds). || `.epiclock({mode: $.epiclock.modes.stopwatch})` ||
+|| holdup || A countup clock, displaying the time since a certain datetime. If the datetime has not yet arrived, the clock will display all zeroes. || `.epiclock({mode: $.epiclock.modes.holdup, offset: {seconds: -10}})` ||
+|| timer || A countdown clock displaying the remaining time on a timer. Similar to the expire counter, except it tares on pause, like the stopwatch clock. || `.epiclock({mode: $.epiclock.modes.timer, offset: {seconds: 60}})` ||
+
+= Clock Events =
+
+The epiclock plugin will dispatch different events through the object which is acting as the clock container. You can bind listeners for these events using the standard jQuery syntax of:
+
+{{{
+    jQuery('#some-element').epiclock({ /* Options */ }).bind(eventType, listenerFunction);
+}}}
+
+*Note*: Unlike the standard jQuery object notification, the `this` pointer of listener functions will point to the epiclock object definition.
+
+Available events are:
+
+|| *Event Type* || *Description* ||
+|| timer || Triggered whenever a timer completes. Only dispatched on timer type clocks (rollover, expire, loop, timer) ||
+|| rendered || Triggered whenever the value of a clocks changes, at a latency of once per 500 seconds (configurable) ||
+|| pause || Triggered whenever the clock is paused. ||
+|| resume || Triggered whenever a paused clock is resumed. ||
+|| destroy || Triggered whenever a clock is destroyed. ||
