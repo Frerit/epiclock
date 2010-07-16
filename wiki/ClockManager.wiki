@@ -1,0 +1,26 @@
+#summary Description of the clock manager.
+#labels Phase-Support
+
+= Introduction =
+
+The clock manager, accessible at `jQuery.epiclock`is a universal controller for all epiclocks on a given page. The manager keeps time, and processes the looping mechanism which advances all clocks forward, as well as provides master control functions which will trigger the related methods on all clocks.
+
+|| *Property* || *Type* || *Description* ||
+|| precision || integer || The precision of the clock ticks. Default is `500ms`. This is how often the clocks are ticked for changes to the date. The faster the precision value is, the more reliable the clock will be for accurate changing of the value. The slower the precision value is, the less reliable the clock will be. This value should be considered *read only* and changing it here will not change the actual precision. Use the `bounce()` method to edit this value.
+|| modes || object || Contains all the available [ClockModes Clock Modes]. This value should be considered *read only*. ||
+|| renderers || object || An object, indexed by renderer name, of all available custom rendering methods available. ||
+
+|| *Method* || *Description* ||
+|| addRenderer(key, renderer, setup) || Adds a new custom renderer to the system. Check the [RenderingGuide Rendering Guide] for more info. ||
+|| make(properties, container, template) || Creates a new clock with the specified properties inside the given container, using the given template type as the internal letter container. The properties are whatever would be passed into a `jQuery('#clock').epiclock(properties)` call. ||
+|| bounce(precision) || Bounces the clock tickers, resetting their precision to the specified value. ||
+|| pause() || Pauses all running clocks. Does nothing for any already paused clocks. ||
+|| resume() || Resumes all paused clocks. Does nothing for any already running clocks. ||
+|| destroy() || Destroy all running clocks, so no current created clocks will run again in this session. ||
+|| restart() || Restart all clocks to their starting time states. ||
+
+{{{
+    jQuery.epiclock.pause();         //  Pauses all running clocks.
+    jQuery.epiclock.bounce(250);     //  Reset the precision to be 250ms
+    jQuery.epiclock.resume();        //  Resumes all paused clocks.
+}}}
