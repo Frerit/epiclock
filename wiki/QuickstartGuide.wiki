@@ -1,9 +1,6 @@
 #summary A quick-start guide for epiclock.
 #labels Phase-Implementation,Phase-Deploy
 
-= Note =
-This is documentation for the *epiclock 3.0*, which has currently _not been released_. To view the documentation for the current clock, please visit [http://www.twablet.com/docs.html?p=epiclock The Legacy Documentation Site].
-
 = Quick Start =
 
 This is a quick-start guide designed to get your using epiclock with as little effort as possible. If all you want to do is display a countdown clock on your page, this is all you will need:
@@ -44,7 +41,7 @@ Here's a checklist of the important pieces epiclock needs to function
 
 = Learning More =
 
-And that's it! That's all you need to put the default clock on a page. However, epiclock offers more than just the standard current time clock. There are a number of different modes and configuration options which can be passed to epiclock to customize it for your needs. Those are covered in the [ClockGuide Clock Guide]. 
+And that's it! That's all you need to put the default clock on a page. However, epiclock offers more than just the standard current time clock. There are a number of different [ClockModes clock modes] and configuration options which can be passed to epiclock to customize it for your needs. Those are covered in the [ClockGuide Clock Guide]. 
 
 The epiclock library also has an extensible mechanism for defining custom renderers for displaying the clock. (Not just formatting, but altering the actual output.) This can be used for creating image clocks, passing the dates to a webservice over ajax, etc. An overview of building your own renderer is available in the [Rendering Rendering Guide].
 
