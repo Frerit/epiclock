@@ -66,6 +66,10 @@ alert($.dateformat.format('F j, Y', date));   // May 18, 2010
 || c || ISO 8601 date || _2004-02-12T15:19:21+00:00_ ||
 || r || FC 2822 formatted date || Ex: _Thu, 21 Dec 2000 16:01:07 +0200_ ||
 || U || The number of seconds since the epoch. || Ex. _1262325600_ ||
+|| *Custom `epiclock` Formatting * || -- || -- ||
+|| Q || The display offset as years. || Ex. _2_ ||
+|| E || The display offset as days. || Ex. _6_ ||
+|| e || The display offset as days, padded to two digits. || Ex. _06_ ||
 
 `*` These rules are used for displaying timer information, working under the assumption that a timer is represented by subtracting the start time of the timer from the date the timer was started, thus offsetting the working date the the epoch, and counting the displacement as the seconds from that offset value. 
 
