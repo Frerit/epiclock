@@ -24,23 +24,12 @@ The epiclock plugin supports a number of different modes and configurations. The
 || target || datestring || Alias of time ||
 || displayOffset || object || An object containing offset values for displacing the years/days of a clock ||
 
+= The Clock Object =
 
-
-= Clock Events =
-
-The epiclock plugin will dispatch different events through the object which is acting as the clock container. You can bind listeners for these events using the standard jQuery syntax of:
+Once the epiclock constructor has been called on an element, you can get reference to it's clock object by using the element's `data()` method.
 
 {{{
-    jQuery('#some-element').epiclock({ /* Options */ }).bind(eventType, listenerFunction);
+    var clock = jQuery('#clock').epiclock({ /* Options */ }).data('epiclock');
 }}}
 
-*Note*: Unlike the standard jQuery object notification, the `this` pointer of listener functions will point to the epiclock object definition.
-
-Available events are:
-
-|| *Event Type* || *Description* ||
-|| timer || Triggered whenever a timer completes. Only dispatched on timer type clocks (rollover, expire, loop, timer) ||
-|| rendered || Triggered whenever the value of a clocks changes, at a latency of once per 500 seconds (configurable) ||
-|| pause || Triggered whenever the clock is paused. ||
-|| resume || Triggered whenever a paused clock is resumed. ||
-|| destroy || Triggered whenever a clock is destroyed. ||
+The following is the API for the clock object.
