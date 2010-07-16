@@ -42,7 +42,7 @@ The following is the API for the clock object.
 || container || `jQuery Object` || The jQuery Object representing the container div for this clock. ||
 
 || *Methods* ||  *Description* ||
-|| bind(event, listener) || -- || Bind a [ClockEvent Clock Event] listener. ||
+|| bind(event, listener) || Bind a [ClockEvent Clock Event] listener. ||
 || pause() || Pause a running clock. Does nothing to paused clocks. ||
 || resume() || Resume a paused clock. Does nothing to running clocks. ||
 || toggle() || Toggle the pause status of the clock. Pauses a running clock, resumes a paused clock. ||
