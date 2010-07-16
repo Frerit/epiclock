@@ -33,3 +33,5 @@ Once the epiclock constructor has been called on an element, you can get referen
 }}}
 
 The following is the API for the clock object.
+
+|| *Method* || *Description* ||
