@@ -47,6 +47,8 @@ The epiclock library also has an extensible mechanism for defining custom render
 
 Additionally, you can customize the output format of any clock in the system using a date formatting string. The available codes, and their use, ar available in the [DateFormatting Date Formatting Guide].
 
+There's also documentation available for the [ClockManager Clock Manager], which universally controls any clocks created on a page.
+
 = Built In Demo =
 
 The epiclock library which you download from this site includes an "index.html" file, which demonstrates some default settings for all the available clock modes.
