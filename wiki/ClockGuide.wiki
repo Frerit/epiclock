@@ -41,11 +41,11 @@ The following is the API for the clock object.
 || mode || string || The current [ClockModes Clock Mode] of the clock. Changing this will change the mode. ||
 || container || `jQuery Object` || The jQuery Object representing the container div for this clock. ||
 
-|| *Methods* || -- ||  *Description* ||
+|| *Methods* ||  *Description* ||
 || bind(event, listener) || -- || Bind a [ClockEvent Clock Event] listener. ||
-|| pause() || -- || Pause a running clock. Does nothing to paused clocks. ||
-|| resume() || -- || Resume a paused clock. Does nothing to running clocks. ||
-|| toggle() || -- || Toggle the pause status of the clock. Pauses a running clock, resumes a paused clock. ||
-|| destroy() || -- || Destroys the clock, to stop it from every running again during this page session. ||
-|| restart(displacement) || -- || Restart's the clock to the given _displacement_, in milliseconds. Used primarily to restart timers. In the case you just want to restart a timer, simply leave _displacement_ undefined. ||
-|| print(format) || -- || Print the current value of the clock, using a [DateFormatting Date Format] string. ||
+|| pause() || Pause a running clock. Does nothing to paused clocks. ||
+|| resume() || Resume a paused clock. Does nothing to running clocks. ||
+|| toggle() || Toggle the pause status of the clock. Pauses a running clock, resumes a paused clock. ||
+|| destroy() || Destroys the clock, to stop it from every running again during this page session. ||
+|| restart(displacement) || Restart's the clock to the given _displacement_, in milliseconds. Used primarily to restart timers. In the case you just want to restart a timer, simply leave _displacement_ undefined. ||
+|| print(format) || Print the current value of the clock, using a [DateFormatting Date Format] string. ||
