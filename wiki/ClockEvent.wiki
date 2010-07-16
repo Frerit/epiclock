@@ -1,0 +1,5 @@
+#summary The events dispatched by an epiclock.
+
+= Introduction =
+
+Clock events are dispatch only. They are provided to allow you to monitor the progress of clocks, and not to interact with them. Triggering a "pause" event for instance, will not pause a clock. Binding to a pause event will simply notify you when a clock has been paused. If you wish to interact with and change the state of the clock, simply use the [ClockGuide Clock Object] to modify the clock.
