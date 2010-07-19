@@ -17,7 +17,7 @@ The epiclock plugin supports a number of different modes and configurations. The
 || startpaused || boolean || Flag which, if true, will start the clock off as paused. Default is false. ||
 || utc || boolean || Flag to determine if the clock should be set to UTC mode. Default is false. ||
 || gmt || boolean || Alias of utc ||
-|| render || function || Callback function for rendering the clock ticks. ||
+|| render || string || A string representing a custom defined rendering function for displaying the clock. See the [RenderingGuide Rendering Guide] for more info.  ||
 || tare || boolean || Flag to determine if the clock should tare (reset) on pause. Default is false ||
 || format || string || A formatting string, as described in the [DateFormatting Date Formatting Guide] ||
 || time || datestring || A string to pass to the JS Date object. Used in some modes. ||
