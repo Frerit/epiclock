@@ -29,7 +29,7 @@ alert($.dateformat.format('F j, Y', date));   // May 18, 2010
 || d || Day of the month, padded to two digits || _01_ to _31_ ||
 || D || Textual representation of the day of the week, three letters || _Mon_ through  _Sun_ ||
 || j || Day of the month without leading zeros. || _1_ to _31_ ||
-|| i || Full textual representation of the day of the week || _Monday_ through _Sunday_ || 
+|| l || Full textual representation of the day of the week || _Monday_ through _Sunday_ || 
 || N || ISO-8601 numeric representation of the day of the week. || _1_ (for Monday) through _7_ (for Sunday) ||
 || S || English ordinal suffix for the day of the month, two characters || _st_, _nd_, _rd_, _th_ ||
 || w || Numeric representation of the day of the week || _0_ (for Monday) through _6_ (for Sunday) ||
