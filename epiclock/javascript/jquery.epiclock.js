@@ -339,13 +339,13 @@
         switch (symbol)
         {
         
-        case 'Q':
+        case 'o':
             return clock.displayOffset.years;
         
-        case 'E':
+        case 'Q':
             return clock.displayOffset.days;
         
-        case 'e':
+        case 'q':
             return $.dateformat.pad(clock.displayOffset.days, 0);
         
         default:
@@ -830,17 +830,17 @@
         //  Custom Date Rules
         //------------------------------
     
-        Q: function ()
+        o: function ()
         {
             return '%displayOffset-years%';
         },
         
-        E: function ()
+        Q: function ()
         {
             return '%displayOffset-days%';
         },
         
-        e: function ()
+        q: function ()
         {
             return '%displayOffset-days-pad%';   
         }
