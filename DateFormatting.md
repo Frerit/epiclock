@@ -1,0 +1,75 @@
+# Introduction #
+
+The dateformat plugin for jQuery adds the ability to use a string of placeholder characters to describe the format which should be used to print a date.
+
+# Usage #
+```
+var date = new Date();
+$('#date').text(date.format('F j, Y')); // May 18, 2010
+alert($.dateformat.format('F j, Y', date));   // May 18, 2010
+```
+
+# Formatting Rules #
+
+| **Character** | **Description** | **Example** |
+|:--------------|:----------------|:------------|
+| **Timer Formatting`*`** | --              | --          |
+| V             | Number of days since epoch | _1_ to _Infinity_ |
+| v             | Number of days since epoch, padded to two digits | _01_ to _Infinity_ |
+| K             | Number of days since epoch, offset for years | _1_ to _364_ |
+| k             | Number of days since epoch, offset for years, padded to two digits | _01_ to _364_ |
+| X             | Number of hours since epoch | _0_ to _23_ |
+| x             | Number of hours since epoch, padded to two digits | _00_ to _23_ |
+| p             | Number of minutes since epoch | _0_ to _59_ |
+| C             | Number of minutes since epoch, padded to two digits | _00_ to _59_ |
+| E             | Number of minutes since the epoch, uncapped by hours | _0_ to _Infinity_  |
+| e             | Number of minutes since the epoch, uncapped by hours, padded to two digits | _00_ to _Infinity_ |
+| **Day Formatting** | --              | --          |
+| d             | Day of the month, padded to two digits | _01_ to _31_ |
+| D             | Textual representation of the day of the week, three letters | _Mon_ through  _Sun_ |
+| j             | Day of the month without leading zeros. | _1_ to _31_ |
+| l             | Full textual representation of the day of the week | _Monday_ through _Sunday_ |
+| N             | ISO-8601 numeric representation of the day of the week. | _1_ (for Monday) through _7_ (for Sunday) |
+| S             | English ordinal suffix for the day of the month, two characters | _st_, _nd_, _rd_, _th_ |
+| w             | Numeric representation of the day of the week | _0_ (for Monday) through _6_ (for Sunday) |
+| z             | The day of the year, starting from 0. | _0_ through _365_ |
+| **Week Formatting** | --              | --          |
+| W             | ISO-8601 week number of year, weeks starting on Monday  | Ex: 42 (42nd week in the year) |
+| **Month Formatting** | --              | --          |
+| F             | A full textual representation of a month. | _January_ through _December_ |
+| m             | Numeric representation of a month, padded to two digits. | _01_ to _12_ |
+| M             | Short textual representation of a month, three letters. | _Jan_ to _Dec_ |
+| n             | Numeric representation of a month, without leading zeros. | _1_ to _12_ |
+| t             | Number of days in the given month. | _28_ to _31_ |
+| **Year Formatting** | --              | --          |
+| L             | Whether it's a leap year. 1 if it is a leap year, 0 otherwise. | _1_ or _0_  |
+| f             | Date object of the first day of the current year | `Date`      |
+| Y             | A full numeric representation of the year, 4 digits | _2004_      |
+| y             | A two digit representation of the year. | 04          |
+| **Time Formatting** | --              | --          |
+| a             | Lowercase Ante/Post Meridiem values. | _am_ or _pm_ |
+| A             | Uppercase Ante/Post Meridiem values. | _AM_ or _PM_ |
+| B             | Swatch Internet Time`**` | _000_ to _999_ |
+| g             | 12-hour format of an hour. | _1_ to _12_ |
+| G             | 24-hour format of an hour. | _0_ to _23_ |
+| h             | 12-hour format of an hour, padded to two digits. | _01_ to _12_ |
+| H             | 24-hour format of an hour, padded to two digits. | _00_ to _23_ |
+| i             | Minutes, padded to two digits. | _00_ to _59_ |
+| s             | Seconds, padded to two digits. | _00_ to _59_ |
+| u             | Microseconds    | Ex. _654321_ |
+| **Timezone Formatting** | --              | --          |
+| O             | Difference to GMT in hours | Ex: _+0200_ |
+| P             | Difference to GMT in hours, with color between minutes and hours | Ex: _+02:00_ |
+| Z             | Timezone offset in seconds | Ex: _-43200_ through _50400_ |
+| **Full Date/Time Formatting** | --              | --          |
+| c             | ISO 8601 date   | _2004-02-12T15:19:21+00:00_ |
+| r             | FC 2822 formatted date | Ex: _Thu, 21 Dec 2000 16:01:07 +0200_ |
+| U             | The number of seconds since the epoch. | Ex. _1262325600_ |
+| **Custom `epiclock` Formatting** | --              | --          |
+| Q             | The display offset as years. | Ex. _2_     |
+| E             | The display offset as days. | Ex. _6_     |
+| e             | The display offset as days, padded to two digits. | Ex. _06_    |
+
+`*` These rules are used for displaying timer information, working under the assumption that a timer is represented by subtracting the start time of the timer from the date the timer was started, thus offsetting the working date the the epoch, and counting the displacement as the seconds from that offset value.
+
+`**` If you ever use this formatting method (Swatch internet time) drop an email to [garside@gmail.com](mailto:garside@gmail.com), as I'm not convinced any real people actually use this.

@@ -1,0 +1,30 @@
+# Introduction #
+
+Clock events are dispatch only. They are provided to allow you to monitor the progress of clocks, and not to interact with them. Triggering a "pause" event for instance, will not pause a clock. Binding to a pause event will simply notify you when a clock has been paused. If you wish to interact with and change the state of the clock, simply use the [Clock Object](ClockGuide.md) to modify the clock.
+
+# Subscribeable Events #
+
+The following events are dispatched by the epiclock plugin. These events are **read-only**, and will merely notify you when the event occurs.
+
+| **Event Type** | **Description** |
+|:---------------|:----------------|
+| timer          | Triggered whenever a timer completes. Only dispatched on timer type clocks (rollover, expire, loop, timer) |
+| rendered       | Triggered whenever the value of a clocks changes, at a latency of once per 500 seconds (configurable) |
+| pause          | Triggered whenever the clock is paused. |
+| resume         | Triggered whenever a paused clock is resumed. |
+| destroy        | Triggered whenever a clock is destroyed. |
+
+# Example Usage #
+```
+    function pauseListener()
+    {
+        this;  //  A reference to the clock object.
+        alert('Clock Paused');
+    }
+
+    var clock = jQuery('#clock').epiclock({ ... }).bind('pause', pauseListener).data('epiclock');
+
+    clock.pause(); //  Will cause the alert to fire.
+```
+
+See the [Clock Guide](ClockGuide.md) for more info.
